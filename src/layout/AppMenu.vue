@@ -15,21 +15,19 @@ const model = ref([
         label: 'Event Control',
         items: [
             { label: 'Event Lifecycle List', icon: 'pi pi-fw pi-id-card', to: '/eventControl/eventLifecycleList' },
-            { label: 'Add Event Type', icon: 'pi pi-fw pi-check-square', to: '/eventControl/addEventType' },
+            { label: 'Add Event Type', icon: 'pi pi-fw pi-check-square', to: '/eventControl/addEventType' }
         ]
     },
     {
         label: 'Passport Control',
         items: [
-            { label: 'Aggregate Statistics', icon: 'pi pi-fw pi-eye', to: '/passportControl/aggregateStatistics'},
-            { label: 'Visualise Random', icon: 'pi pi-fw pi-globe',  to: '/passportControl/visualiseRandom'}
+            { label: 'Aggregate Statistics', icon: 'pi pi-fw pi-eye', to: '/passportControl/aggregateStatistics' },
+            { label: 'Visualise Random', icon: 'pi pi-fw pi-globe', to: '/passportControl/visualiseRandom' }
         ]
     },
     {
         label: 'Credential Control',
-        items: [
-            { label: 'List', icon: 'pi pi-fw pi-prime', to: '/credentialControl/list' }
-    ]
+        items: [{ label: 'List', icon: 'pi pi-fw pi-prime', to: '/credentialControl/list' }]
     }
 ]);
 </script>
@@ -40,11 +38,6 @@ const model = ref([
             <app-menu-item v-if="!item.separator" :item="item" :index="i"></app-menu-item>
             <li v-if="item.separator" class="menu-separator"></li>
         </template>
-        <li>
-            <a href="https://www.primefaces.org/primeblocks-vue/#/" target="_blank">
-                <img src="/layout/images/banner-primeblocks.png" alt="Prime Blocks" class="w-full mt-3" />
-            </a>
-        </li>
     </ul>
 </template>
 

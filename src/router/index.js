@@ -9,6 +9,21 @@ const router = createRouter({
             component: AppLayout,
             children: [
                 {
+                    path: '/',
+                    name: 'Main',
+                    component: () => import('@/views/pages/MainPage.vue')
+                },
+                {
+                    path: '/settings',
+                    name: 'Settings',
+                    component: () => import('@/views/pages/SettingsPage.vue')
+                },
+                {
+                    path: '/profile',
+                    name: 'Profile',
+                    component: () => import('@/views/pages/ProfilePage.vue')
+                },
+                {
                     path: '/templateControl/templateCreation',
                     name: 'Template Creation',
                     component: () => import('@/views/templateControl/templateCreation.vue')

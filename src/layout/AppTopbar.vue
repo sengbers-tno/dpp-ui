@@ -26,8 +26,22 @@ const onTopBarMenuButton = () => {
 };
 const onSettingsClick = () => {
     topbarMenuActive.value = false;
-    router.push('/documentation');
+    router.push('/settings');
 };
+
+const onProfileClick = () => {
+      topbarMenuActive.value = false
+      router.push({ path: '/profile' })
+    }
+
+    const onVisualiseRandomClick = () => {
+      topbarMenuActive.value = false
+      router.push({ path: '/passportControl/visualiseRandom' })
+    }
+
+
+
+
 const topbarMenuClasses = computed(() => {
     return {
         'layout-topbar-menu-mobile-active': topbarMenuActive.value
@@ -63,8 +77,7 @@ const isOutsideClicked = (event) => {
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <img :src="logoUrl" alt="logo" />
-            <span>SAKAI</span>
+            <i class="pi pi-home" style="font-size: 1.5rem"></i>
         </router-link>
 
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
@@ -76,11 +89,11 @@ const isOutsideClicked = (event) => {
         </button>
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-calendar"></i>
-                <span>Calendar</span>
+            <button @click="onVisualiseRandomClick()" class="p-link layout-topbar-button">
+                <i class="pi pi-chart-pie"></i>
+                <span>Dashboard</span>
             </button>
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
+            <button @click="onProfileClick()" class="p-link layout-topbar-button">
                 <i class="pi pi-user"></i>
                 <span>Profile</span>
             </button>
