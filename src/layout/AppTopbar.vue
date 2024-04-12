@@ -3,7 +3,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
 
-const { layoutConfig, onMenuToggle } = useLayout();
+const { onMenuToggle } = useLayout();
 
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
@@ -17,10 +17,6 @@ onBeforeUnmount(() => {
     unbindOutsideClickListener();
 });
 
-const logoUrl = computed(() => {
-    return `layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
-});
-
 const onTopBarMenuButton = () => {
     topbarMenuActive.value = !topbarMenuActive.value;
 };
@@ -30,17 +26,14 @@ const onSettingsClick = () => {
 };
 
 const onProfileClick = () => {
-      topbarMenuActive.value = false
-      router.push({ path: '/profile' })
-    }
+    topbarMenuActive.value = false;
+    router.push({ path: '/profile' });
+};
 
-    const onVisualiseRandomClick = () => {
-      topbarMenuActive.value = false
-      router.push({ path: '/passportControl/visualiseRandom' })
-    }
-
-
-
+const onVisualiseRandomClick = () => {
+    topbarMenuActive.value = false;
+    router.push({ path: '/passportControl/visualiseRandom' });
+};
 
 const topbarMenuClasses = computed(() => {
     return {
@@ -77,7 +70,7 @@ const isOutsideClicked = (event) => {
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <i class="pi pi-home" style="font-size: 1.5rem"></i>
+            <img src="../assets/Ai matters logo.svg" alt="logo" class="logo" />
         </router-link>
 
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
@@ -105,4 +98,8 @@ const isOutsideClicked = (event) => {
     </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.logo {
+    height: 5dvh;
+}
+</style>
