@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
+import ProfileButton from '../components/ProfileButton.vue';
 
 const { onMenuToggle } = useLayout();
 
@@ -23,11 +24,6 @@ const onTopBarMenuButton = () => {
 const onSettingsClick = () => {
     topbarMenuActive.value = false;
     router.push('/settings');
-};
-
-const onProfileClick = () => {
-    topbarMenuActive.value = false;
-    router.push({ path: '/profile' });
 };
 
 const onVisualiseRandomClick = () => {
@@ -84,16 +80,13 @@ const isOutsideClicked = (event) => {
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
             <button @click="onVisualiseRandomClick()" class="p-link layout-topbar-button">
                 <i class="pi pi-chart-pie"></i>
-                <span>Dashboard</span>
+                <span class="hide-span">Dashboard</span>
             </button>
-            <button @click="onProfileClick()" class="p-link layout-topbar-button">
-                <i class="pi pi-user"></i>
-                <span>Profile</span>
-            </button>
-            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
+            <button @click="onSettingsClick()" class="p-link layout-topbar-button pr-4">
                 <i class="pi pi-cog"></i>
-                <span>Settings</span>
+                <span class="hide-span">Settings</span>
             </button>
+            <ProfileButton></ProfileButton>
         </div>
     </div>
 </template>
@@ -101,5 +94,10 @@ const isOutsideClicked = (event) => {
 <style lang="scss" scoped>
 .logo {
     height: 5dvh;
+}
+
+.hide-span {
+    font-size: 1rem !important;
+    display: none !important;
 }
 </style>
