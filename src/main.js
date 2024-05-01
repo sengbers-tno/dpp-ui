@@ -110,8 +110,13 @@ import BlockViewer from '@/components/BlockViewer.vue';
 
 import '@/assets/styles.scss';
 
-const app = createApp(App);
+import { createPinia } from 'pinia';
+import axiosInstance from './axios';
 
+const app = createApp(App);
+const pinia = createPinia();
+
+app.use(pinia);
 app.use(router);
 app.use(PrimeVue, { ripple: true });
 app.use(ToastService);
@@ -220,5 +225,7 @@ app.component('TreeSelect', TreeSelect);
 app.component('TreeTable', TreeTable);
 app.component('TriStateCheckbox', TriStateCheckbox);
 app.component('VirtualScroller', VirtualScroller);
+
+app.provide('axios', axiosInstance);
 
 app.mount('#app');

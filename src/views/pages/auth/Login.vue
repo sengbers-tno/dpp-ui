@@ -1,6 +1,7 @@
 <script setup>
 import { useLayout } from '@/layout/composables/layout';
-import { ref, computed } from 'vue';
+import { useUserStore } from '@/store/user';
+import { ref, computed, onMounted } from 'vue';
 
 const { layoutConfig } = useLayout();
 const email = ref('');
@@ -9,6 +10,18 @@ const checked = ref(false);
 
 const logoUrl = computed(() => {
     return `/src/assets/${layoutConfig.darkTheme.value ? 'Ai matters logo' : 'Ai matters logo'}.svg`;
+});
+
+const store = useUserStore();
+const getUsers = computed(() => {
+    return store.getUsers;
+});
+const users = computed(() => {
+    return store.users;
+});
+
+onMounted(() => {
+    store.fetchUsers();
 });
 </script>
 
@@ -42,6 +55,12 @@ const logoUrl = computed(() => {
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="hello">
+            <h1>Made By Getters</h1>
+            <div v-for="user in getUsers" :key="user.id">{{ user.id }} {{ user.name }} {{ user.address }}</div>
+            <h1>Made By Actions</h1>
+            <div v-for="user in users" :key="user.id">{{ user.id }} {{ user.name }} {{ user.address }}</div>
         </div>
     </div>
 </template>
