@@ -22,6 +22,16 @@ export const useUserStore = defineStore('user', {
                 console.log(error);
             }
         },
+        async findCredentials() {
+            try {
+                await this.axios.get('credentials/available').then((response) => {
+                    console.log(response.data);
+                });
+            } catch (error) {
+                alert(error);
+                console.log(error);
+            }
+        },
         checkLoggedInStatus() {
             if (localStorage.getItem('user')) {
                 this.isLoggedIn = true;
