@@ -71,7 +71,7 @@ const router = createRouter({
                 {
                     path: '/passportControl/dppsVisualisation',
                     name: 'DPP Visualisation',
-                    component: () => import('@/views/pages/passportControl/aggregateStatistics.vue')
+                    component: () => import('@/views/pages/passportControl/dppsVisualisation.vue')
                 },
                 {
                     path: '/credentialControl/list',
