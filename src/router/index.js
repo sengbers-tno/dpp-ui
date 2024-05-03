@@ -49,9 +49,29 @@ const router = createRouter({
                     component: () => import('@/views/pages/passportControl/aggregateStatistics.vue')
                 },
                 {
+                    path: '/passportControl/dppsForm',
+                    name: 'DPPs Form',
+                    component: () => import('@/views/pages/passportControl/dppsForm.vue')
+                },
+                {
+                    path: '/passportControl/uuidView',
+                    name: 'UUID View',
+                    component: () => import('@/views/pages/passportControl/uuidView.vue')
+                },
+                {
+                    path: '/passportControl/uuidUpdate',
+                    name: 'UUID Update',
+                    component: () => import('@/views/pages/passportControl/uuidUpdate.vue')
+                },
+                {
                     path: '/passportControl/visualiseRandom',
                     name: 'Visualise Random',
                     component: () => import('@/views/pages/passportControl/visualiseRandom.vue')
+                },
+                {
+                    path: '/passportControl/dppsVisualisation',
+                    name: 'DPP Visualisation',
+                    component: () => import('@/views/pages/passportControl/aggregateStatistics.vue')
                 },
                 {
                     path: '/credentialControl/list',
