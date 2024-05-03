@@ -125,6 +125,26 @@ export const useDppStore = defineStore('user', {
                 console.log(error);
             }
         },
+        async getDppAttachments(uuid) {
+            try {
+                await this.axios.get(`dpps/${uuid}/attachments`).then((response) => {
+                    console.log(response.data);
+                });
+            } catch (error) {
+                alert(error);
+                console.log(error);
+            }
+        },
+        async putDppAttachments(uuid, attachment_id) {
+            try {
+                await this.axios.get(`dpps/${uuid}/attachments/${attachment_id}`).then((response) => {
+                    console.log(response.data);
+                });
+            } catch (error) {
+                alert(error);
+                console.log(error);
+            }
+        },
         // Add a file that is stored with a reference to it added to the DPP itself.
         async addDppAttachments(uuid, file) {
             try {
