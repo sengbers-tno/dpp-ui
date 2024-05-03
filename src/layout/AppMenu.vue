@@ -21,6 +21,10 @@ const model = ref([
     {
         label: 'Passport Control',
         items: [
+            { label: 'DPP Visualisation', icon: 'pi pi-fw pi-globe', to: '/passportControl/dppsVisualisation' },
+            { label: 'DPP Form', icon: 'pi pi-fw pi-eye', to: '/passportControl/dppsForm' },
+            { label: 'DPP View', icon: 'pi pi-fw pi-eye', to: '/passportControl/uuidView' },
+            { label: 'DPP Update', icon: 'pi pi-fw pi-eye', to: '/passportControl/uuidUpdate' },
             { label: 'Aggregate Statistics', icon: 'pi pi-fw pi-eye', to: '/passportControl/aggregateStatistics' },
             { label: 'Visualise Random', icon: 'pi pi-fw pi-globe', to: '/passportControl/visualiseRandom' }
         ]
