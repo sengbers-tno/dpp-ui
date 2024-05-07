@@ -29,14 +29,14 @@ const events = ref([
         icon: 'pi pi-check',
         color: '#607D8B',
         content: 'The retailer sells the t-shirts to consumers.'
-    },
+    }
 ]);
 </script>
 
 <template>
     <div>
-        <h1>T-Shirt Supply Chain Timeline</h1>
-        <div class="card">
+        <h3>T-Shirt Supply Chain Timeline</h3>
+        <div class="">
             <Timeline :value="events" align="alternate" class="customized-timeline">
                 <template #marker="slotProps">
                     <span class="bullet" :style="{ backgroundColor: slotProps.item.color }">

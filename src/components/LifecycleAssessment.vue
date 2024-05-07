@@ -131,7 +131,7 @@ const setWaterData = () => {
     <div class="graph-container">
         <div class="card">
             <h2>Carbon Emissions</h2>
-            <Chart type="bar" :options="carbonOptions" :data="carbonData"/>
+            <Chart type="bar" :options="carbonOptions" :data="carbonData" />
         </div>
 
         <div class="card">
@@ -147,7 +147,6 @@ const setWaterData = () => {
 </template>
 
 <style lang="scss" scoped>
-
 .h2 {
     align-items: center;
 }

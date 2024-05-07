@@ -56,7 +56,6 @@ const toggle = (event) => {
 
 const selectedItem = ref(null);
 const handleMenuItemClick = (item) => {
-    console.log(item);
     if (item.role) {
         selectedItem.value = item;
     }

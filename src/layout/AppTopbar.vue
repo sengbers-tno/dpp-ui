@@ -96,8 +96,10 @@ const isOutsideClicked = (event) => {
     height: 5dvh;
 }
 
-.hide-span {
-    font-size: 1rem !important;
-    display: none !important;
+@media (min-width: 992px) {
+    .hide-span {
+        font-size: 1rem !important;
+        display: none !important;
+    }
 }
 </style>

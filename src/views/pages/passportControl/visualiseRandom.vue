@@ -1,24 +1,24 @@
 <script setup>
-import TabOne from '@/components/TabOne.vue';
-import TabTwo from '@/components/TabTwo.vue';
-import TabThree from '@/components/TabThree.vue';
+import Timeline from '@/components/Timeline.vue';
+import LifecycleAssessment from '@/components/LifecycleAssessment.vue';
+import MaterialComposition from '@/components/MaterialComposition.vue';
 </script>
 
 <template>
     <TabView>
         <TabPanel header="Supply Chain">
             <div>
-                <TabOne></TabOne>
+                <Timeline></Timeline>
             </div>
         </TabPanel>
         <TabPanel header="Lifecycle Assessment">
             <div>
-                <TabTwo></TabTwo>
+                <LifecycleAssessment></LifecycleAssessment>
             </div>
         </TabPanel>
         <TabPanel header="Material Composition">
             <div>
-                <TabThree></TabThree>
+                <MaterialComposition></MaterialComposition>
             </div>
         </TabPanel>
     </TabView>
