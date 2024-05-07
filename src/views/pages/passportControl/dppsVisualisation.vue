@@ -14,11 +14,13 @@ const value = ref(null);
 const store = useDppStore();
 const nodes = ref();
 const loading = ref(false);
+const jsonDisplayData = ref();
 
 onMounted(() => {
     //fetchDppData();
     loading.value = true;
     var data = JSON.parse(JSON.stringify(dppData));
+    jsonDisplayData.value = data;
     var test = convertJsonToCustomFormat(data);
     nodes.value = test;
     loading.value = false;
@@ -48,7 +50,11 @@ const latestDpp = () => {
 
 const confirmDpp = () => {
     console.log('Clicked confirm dpp');
-    console.log(`Value ${this.value}`);
+    console.log(`Value ${value.value}`);
+};
+
+const onClickId = (event) => {
+    console.log(event);
 };
 
 function convertJsonToCustomFormat(jsonData) {
@@ -121,9 +127,15 @@ function convertJsonToCustomFormat(jsonData) {
             </div>
             <div class="pb-3">
                 <Panel header="Product Hierarchy" toggleable>
-                    <TreeTable :value="nodes" :paginator="true" :rows="10" :loading="loading" :resizableColumns="true">
-                        <Column class="text single-line" field="id" header="id" expander></Column>
-                        <Column field="title" header="title"></Column>
+                    <TreeTable :value="nodes" :paginator="true" :rows="10" :loading="loading" :resizableColumns="true" dataKey="id">
+                        <Column field="id" header="Id" expander>
+                            <template #body="slotProps">
+                                <div @click="onClickId(slotProps.node)" style="cursor: pointer">
+                                    {{ slotProps.node.data.id }}
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="title" header="Type"></Column>
                         <Column field="manufacturer" header="Owner"></Column>
                     </TreeTable>
                 </Panel>
@@ -153,7 +165,9 @@ function convertJsonToCustomFormat(jsonData) {
                         <div></div>
                     </TabPanel>
                     <TabPanel header="JSON data">
-                        <div></div>
+                        <div>
+                            <pre>{{ jsonDisplayData }}</pre>
+                        </div>
                     </TabPanel>
                 </TabView>
             </Panel>
@@ -173,5 +187,11 @@ function convertJsonToCustomFormat(jsonData) {
 
 .container {
     flex-wrap: wrap;
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    text-align: justify;
 }
 </style>
