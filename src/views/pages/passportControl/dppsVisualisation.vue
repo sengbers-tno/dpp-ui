@@ -20,6 +20,7 @@ const route = useRoute();
 const router = useRouter();
 const uuid = ref();
 const inputPlaceholder = ref('');
+const dataList = ref();
 
 onMounted(() => {
     getUrlQueryParams().then(() => {
@@ -33,6 +34,7 @@ onMounted(() => {
         var data = JSON.parse(JSON.stringify(dppData));
         jsonDisplayData.value = data;
         var test = convertJsonToCustomFormat(data);
+        dataList.value = test;
         nodes.value = test;
         loading.value = false;
     });
@@ -42,10 +44,7 @@ const getUrlQueryParams = async () => {
     //router is async so we wait for it to be ready
     await router.isReady();
     //once its ready we can access the query params
-    console.log(route.params['uuid']);
-
     uuid.value = route.params['uuid'];
-    console.log(uuid.value);
 };
 
 async function fetchDppData(uuid) {
@@ -54,6 +53,7 @@ async function fetchDppData(uuid) {
             loading.value = true;
             var data = JSON.parse(JSON.stringify(response));
             var result = convertJsonToCustomFormat(data);
+            jsonDisplayData.value = data;
             nodes.value = result;
             loading.value = false;
         });
@@ -76,16 +76,16 @@ const confirmDpp = () => {
 };
 
 const onClickId = (event) => {
-    console.log(event);
+    jsonDisplayData.value = event.data.json;
 };
 
-function convertJsonToCustomFormat(jsonData) {
+const convertJsonToCustomFormat = (jsonData) => {
     // For now only picking the first one, should be changed in the future.
     var key = Object.keys(jsonData)[0];
     const desiredJsonValue = jsonData[key];
     const result = [];
 
-    function processNode(node) {
+    function processNode(node, passportName, parentName, json) {
         var idMatch = node.id.match(/[^:]+$/);
         var idValue = idMatch ? idMatch[0] : null;
 
@@ -93,20 +93,26 @@ function convertJsonToCustomFormat(jsonData) {
         var manufacturerValue = match ? match[1] : null;
 
         const customNode = {
-            key: node.id,
+            key: passportName + ':parent:' + parentName + ':' + node.id,
             data: {
                 id: idValue,
                 title: node.title,
-                manufacturer: manufacturerValue
+                manufacturer: manufacturerValue,
+                json: json
             }
         };
+
+        if (!parentName) {
+            parentName = passportName;
+        }
 
         if (node.subpassports && node.subpassports.length > 0) {
             customNode.children = node.subpassports
                 .map((childNode) => {
-                    const value = childNode[Object.keys(childNode)[0]];
+                    var passportNameChild = Object.keys(childNode)[0];
+                    var childValue = childNode[passportNameChild];
                     if (childNode) {
-                        return processNode(value);
+                        return processNode(childValue, passportNameChild, passportName, childNode);
                     }
                     return null; // Handle missing child nodes gracefully
                 })
@@ -115,9 +121,9 @@ function convertJsonToCustomFormat(jsonData) {
         return customNode;
     }
 
-    result.push(processNode(desiredJsonValue));
+    result.push(processNode(desiredJsonValue, key, null, jsonData));
     return result;
-}
+};
 </script>
 
 <template>

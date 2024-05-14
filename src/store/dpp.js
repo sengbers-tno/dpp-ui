@@ -3,10 +3,11 @@ import axiosInstance from '../axios';
 
 export const useDppStore = defineStore('user', {
     state: () => ({
-        axios: axiosInstance
+        axios: axiosInstance,
+        dppFullData: 15870,
     }),
     getters: {
-        //
+        getDppFullData: (state) => state.dppFullData
     },
     actions: {
         // create a DPP with basic attributes.
@@ -81,6 +82,7 @@ export const useDppStore = defineStore('user', {
             try {
                 await this.axios.get(`dpps/${uuid}/full`).then((response) => {
                     console.log(response.data);
+                    this.dppFullData = response.data;
                 });
             } catch (error) {
                 alert(error);
