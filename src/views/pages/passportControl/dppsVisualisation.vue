@@ -85,7 +85,7 @@ const convertJsonToCustomFormat = (jsonData) => {
     const desiredJsonValue = jsonData[key];
     const result = [];
 
-    function processNode(node, passportName, parentName, json) {
+    function processNode(node, passportName, parentName, json, key) {
         var idMatch = node.id.match(/[^:]+$/);
         var idValue = idMatch ? idMatch[0] : null;
 
@@ -156,11 +156,11 @@ const convertJsonToCustomFormat = (jsonData) => {
             <div class="pb-3">
                 <Panel header="Product Hierarchy" toggleable>
                     <TreeTable :value="nodes" :paginator="true" :rows="10" :loading="loading" :resizableColumns="true" dataKey="id">
-                        <Column field="id" header="Id" expander>
+                        <Column field="id" header="Id" expander class="column">
                             <template #body="slotProps">
-                                <div @click="onClickId(slotProps.node)" style="cursor: pointer">
-                                    {{ slotProps.node.data.id }}
-                                </div>
+                                <button class="button" @click="onClickId(slotProps.node)">
+                                    <span>{{ slotProps.node.data.id }}</span>
+                                </button>
                             </template>
                         </Column>
                         <Column field="title" header="Type"></Column>
@@ -221,5 +221,21 @@ pre {
     white-space: pre-wrap;
     word-wrap: break-word;
     text-align: justify;
+}
+
+:deep(.button) {
+    background-color: #18181b;
+    border-width: 0;
+    cursor: pointer;
+    font-family: 'Inter var', sans-serif;
+    font-size: 1rem;
+}
+
+:deep(.p-treetable .p-treetable-tbody) {
+    .column {
+        display: flex;
+        text-align: left;
+        padding: 1rem;
+    }
 }
 </style>
