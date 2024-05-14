@@ -9,26 +9,48 @@ import { useDppStore } from '@/store/dpp.js';
 import dppData from '@/models/templates.json';
 
 import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-const value = ref(null);
+const uuidValue = ref(null);
 const store = useDppStore();
 const nodes = ref();
 const loading = ref(false);
 const jsonDisplayData = ref();
+const route = useRoute();
+const router = useRouter();
+const uuid = ref();
+const inputPlaceholder = ref('');
 
 onMounted(() => {
-    //fetchDppData();
-    loading.value = true;
-    var data = JSON.parse(JSON.stringify(dppData));
-    jsonDisplayData.value = data;
-    var test = convertJsonToCustomFormat(data);
-    nodes.value = test;
-    loading.value = false;
+    getUrlQueryParams().then(() => {
+        // For now the code below is commented because the backend is not working yet.
+        // if (uuid.value) {
+        //     inputPlaceholder.value = uuid.value;
+        //     fetchDppData('03556607-ef11-4c8d-b28f-4b4e65f011fb');
+        //     uuidValue.value = uuid.value;
+        // }
+        loading.value = true;
+        var data = JSON.parse(JSON.stringify(dppData));
+        jsonDisplayData.value = data;
+        var test = convertJsonToCustomFormat(data);
+        nodes.value = test;
+        loading.value = false;
+    });
 });
 
-async function fetchDppData() {
+const getUrlQueryParams = async () => {
+    //router is async so we wait for it to be ready
+    await router.isReady();
+    //once its ready we can access the query params
+    console.log(route.params['uuid']);
+
+    uuid.value = route.params['uuid'];
+    console.log(uuid.value);
+};
+
+async function fetchDppData(uuid) {
     try {
-        await store.getDppFull('03556607-ef11-4c8d-b28f-4b4e65f011fb').then((response) => {
+        await store.getDppFull(uuid).then((response) => {
             loading.value = true;
             var data = JSON.parse(JSON.stringify(response));
             var result = convertJsonToCustomFormat(data);
@@ -50,7 +72,7 @@ const latestDpp = () => {
 
 const confirmDpp = () => {
     console.log('Clicked confirm dpp');
-    console.log(`Value ${value.value}`);
+    console.log(`Value ${uuidValue.value}`);
 };
 
 const onClickId = (event) => {
@@ -107,7 +129,7 @@ function convertJsonToCustomFormat(jsonData) {
                         <div class="flex align-content-center">
                             <div class="flex flex-column gap-2 pr-2">
                                 <label for="productUuid">Product Uuid</label>
-                                <InputText id="productUuid" v-model="value" aria-describedby="productUuid-help" />
+                                <InputText id="productUuid" v-model="uuidValue" :placeholder="inputPlaceholder" aria-describedby="productUuid-help" />
                                 <small id="productUuid-help">Enter the uuid of the product</small>
                             </div>
                             <div class="button-style">

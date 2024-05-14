@@ -69,7 +69,7 @@ const router = createRouter({
                     component: () => import('@/views/pages/passportControl/visualiseRandom.vue')
                 },
                 {
-                    path: '/passportControl/dppsVisualisation',
+                    path: '/passportControl/dppsVisualisation/:uuid?',
                     name: 'DPP Visualisation',
                     component: () => import('@/views/pages/passportControl/dppsVisualisation.vue')
                 },
