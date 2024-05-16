@@ -78,6 +78,7 @@ const confirmDpp = () => {
 };
 
 const onClickId = (event) => {
+    console.log(event);
     jsonDisplayData.value = event.data.json;
 
     // Pass through the json data to the timeline component
@@ -161,14 +162,14 @@ const convertJsonToCustomFormat = (jsonData) => {
             <div class="pb-3">
                 <Panel header="Product Hierarchy" toggleable>
                     <TreeTable :value="nodes" :paginator="true" :rows="10" :loading="loading" :resizableColumns="true" dataKey="id">
-                        <Column field="id" header="Id" expander class="column">
+                        <Column field="title" header="Type" expander class="column">
                             <template #body="slotProps">
                                 <button class="button" @click="onClickId(slotProps.node)">
-                                    <span>{{ slotProps.node.data.id }}</span>
+                                    <span>{{ slotProps.node.data.title }}</span>
                                 </button>
                             </template>
                         </Column>
-                        <Column field="title" header="Type"></Column>
+                        <Column field="id" header="ID"></Column>
                         <Column field="manufacturer" header="Owner"></Column>
                     </TreeTable>
                 </Panel>

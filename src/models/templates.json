@@ -37,7 +37,7 @@
                         "@id": "urn:manufacturer:TNO:03556607-ef11-4c8d-b28f-4b4e65f011fb",
                         "@type": "prov:Entity"
                     },
-                    "prov:atTime": {
+                    "prov:endedAtTime": {
                         "@type": "xsd:dateTime",
                         "@value": "2022-12-27T10:00:00Z"
                     },
@@ -80,7 +80,7 @@
                     },
                     "@type": "elenco:IntegrationEvent",
                     "@id": "urn:Elenco:events:activity:00028",
-                    "prov:atTime": {
+                    "prov:endedAtTime": {
                         "@type": "xsd:dateTime",
                         "@value": "2022-12-27T08:00:00Z"
                     },
@@ -105,7 +105,7 @@
                     },
                     "@type": "elenco:FinalAssemblyEvent",
                     "@id": "urn:Elenco:events:activity:00029",
-                    "prov:atTime": {
+                    "prov:endedAtTime": {
                         "@type": "xsd:dateTime",
                         "@value": "2022-12-27T10:00:00Z"
                     },
@@ -138,7 +138,7 @@
                     },
                     "@type": "elenco:ShippingEvent",
                     "@id": "urn:Elenco:events:activity:00030",
-                    "prov:atTime": {
+                    "prov:endedAtTime": {
                         "@type": "xsd:dateTime",
                         "@value": "2022-12-27T12:00:00Z"
                     },
@@ -346,7 +346,7 @@
                                 },
                                 "@type": "elenco:FinalAssemblyEvent",
                                 "@id": "urn:Elenco:events:activity:00029",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-27T10:00:00Z"
                                 },
@@ -580,7 +580,7 @@
                                 },
                                 "@type": "elenco:FinalAssemblyEvent",
                                 "@id": "urn:Elenco:events:activity:00029",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-27T10:00:00Z"
                                 },
@@ -795,7 +795,7 @@
                                 },
                                 "@type": "elenco:FinalAssemblyEvent",
                                 "@id": "urn:Elenco:events:activity:00029",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-27T10:00:00Z"
                                 },
@@ -870,7 +870,7 @@
                                     "@id": "urn:manufacturer:TNO:3e19ba83-af5b-4dfe-a405-2f081068573c",
                                     "@type": "prov:Entity"
                                 },
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-26T08:00:00Z"
                                 },
@@ -956,7 +956,7 @@
                                 },
                                 "@type": "elenco:AttachmentEvent",
                                 "@id": "urn:Elenco:events:activity:00022",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-26T15:00:00Z"
                                 },
@@ -981,7 +981,7 @@
                                 },
                                 "@type": "elenco:AttachmentEvent",
                                 "@id": "urn:Elenco:events:activity:00023",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-26T11:00:00Z"
                                 },
@@ -1006,7 +1006,7 @@
                                 },
                                 "@type": "elenco:AttachmentEvent",
                                 "@id": "urn:Elenco:events:activity:00024",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-26T12:00:00Z"
                                 },
@@ -1031,7 +1031,7 @@
                                 },
                                 "@type": "elenco:PlacingEvent",
                                 "@id": "urn:Elenco:events:activity:00025",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-26T13:00:00Z"
                                 },
@@ -1060,7 +1060,7 @@
                                 },
                                 "@type": "elenco:AttachmentEvent",
                                 "@id": "urn:Elenco:events:activity:00026",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-26T14:00:00Z"
                                 },
@@ -1085,7 +1085,7 @@
                                 },
                                 "@type": "elenco:AttachmentEvent",
                                 "@id": "urn:Elenco:events:activity:00027",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-26T10:00:00Z"
                                 },
@@ -1110,7 +1110,7 @@
                                 },
                                 "@type": "elenco:IntegrationEvent",
                                 "@id": "urn:Elenco:events:activity:00028",
-                                "prov:atTime": {
+                                "prov:endedAtTime": {
                                     "@type": "xsd:dateTime",
                                     "@value": "2022-12-27T08:00:00Z"
                                 },
@@ -1287,7 +1287,7 @@
                                             },
                                             "@type": "elenco:AttachmentEvent",
                                             "@id": "urn:Elenco:events:activity:00027",
-                                            "prov:atTime": {
+                                            "prov:endedAtTime": {
                                                 "@type": "xsd:dateTime",
                                                 "@value": "2022-12-26T10:00:00Z"
                                             },
@@ -1634,7 +1634,7 @@
                                             },
                                             "@type": "elenco:AttachmentEvent",
                                             "@id": "urn:Elenco:events:activity:00023",
-                                            "prov:atTime": {
+                                            "prov:endedAtTime": {
                                                 "@type": "xsd:dateTime",
                                                 "@value": "2022-12-26T11:00:00Z"
                                             },
@@ -1864,7 +1864,7 @@
                                             },
                                             "@type": "elenco:AttachmentEvent",
                                             "@id": "urn:Elenco:events:activity:00024",
-                                            "prov:atTime": {
+                                            "prov:endedAtTime": {
                                                 "@type": "xsd:dateTime",
                                                 "@value": "2022-12-26T12:00:00Z"
                                             },
@@ -2082,7 +2082,7 @@
                                             },
                                             "@type": "elenco:PlacingEvent",
                                             "@id": "urn:Elenco:events:activity:00025",
-                                            "prov:atTime": {
+                                            "prov:endedAtTime": {
                                                 "@type": "xsd:dateTime",
                                                 "@value": "2022-12-26T13:00:00Z"
                                             },
@@ -2312,7 +2312,7 @@
                                             },
                                             "@type": "elenco:PlacingEvent",
                                             "@id": "urn:Elenco:events:activity:00025",
-                                            "prov:atTime": {
+                                            "prov:endedAtTime": {
                                                 "@type": "xsd:dateTime",
                                                 "@value": "2022-12-26T13:00:00Z"
                                             },
@@ -2594,7 +2594,7 @@
                                             },
                                             "@type": "elenco:AttachmentEvent",
                                             "@id": "urn:Elenco:events:activity:00026",
-                                            "prov:atTime": {
+                                            "prov:endedAtTime": {
                                                 "@type": "xsd:dateTime",
                                                 "@value": "2022-12-26T14:00:00Z"
                                             },
@@ -2877,7 +2877,7 @@
                                             },
                                             "@type": "elenco:AttachmentEvent",
                                             "@id": "urn:Elenco:events:activity:00022",
-                                            "prov:atTime": {
+                                            "prov:endedAtTime": {
                                                 "@type": "xsd:dateTime",
                                                 "@value": "2022-12-26T15:00:00Z"
                                             },

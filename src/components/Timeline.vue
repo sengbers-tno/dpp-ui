@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps, toRefs, watch } from 'vue';
+import { ref, defineProps, toRefs, watch, computed } from 'vue';
 
 const props = defineProps({
     timelineEvents: Object
@@ -8,41 +8,104 @@ const props = defineProps({
 const tEvents = toRefs(props);
 const events = ref([]);
 const showTimeline = ref(true);
+const checked = ref(false);
+const timeLineKey = ref('');
+const columnHasBeenClicked = ref(false);
 
-watch(tEvents.timelineEvents, (json) => {
-    events.value = [];
-    var key = Object.keys(json)[0];
-    const desiredJsonValue = json[key];
+const uniqueEventObjects = computed(() => {
+    const seenIds = new Set();
+    return events.value.filter((obj) => {
+        if (!seenIds.has(obj.id)) {
+            seenIds.add(obj.id);
+            return true;
+        }
+        return false;
+    });
+});
 
-    const processEvent = (event) => {
-        return {
-            status: event['@type'],
-            date: event['prov:atTime']['@value'],
-            icon: 'pi pi-cog',
-            color: '#9C27B0',
-            content: event['@type']
-        };
+const processEvent = (event) => {
+    return {
+        status: event['@type'],
+        date: event['prov:endedAtTime']['@value'],
+        icon: 'pi pi-cog',
+        color: '#9C27B0',
+        content: event['prov:description'] ?? '',
+        id: event['@id']
     };
+};
 
-    if (desiredJsonValue.events.ownership) {
-        desiredJsonValue.events.ownership.forEach((ownershipEvent) => {
+const loopthroughPassports = (jsonValue) => {
+    if (jsonValue.events.ownership) {
+        jsonValue.events.ownership.forEach((ownershipEvent) => {
             events.value.push(processEvent(ownershipEvent));
         });
     }
 
-    if (desiredJsonValue.events.activity) {
-        desiredJsonValue.events.activity.forEach((activityEvent) => {
+    if (jsonValue.events.activity) {
+        jsonValue.events.activity.forEach((activityEvent) => {
             events.value.push(processEvent(activityEvent));
         });
     }
 
+    events.value = uniqueEventObjects.value;
+};
+
+const determineAddingSubpassportEvents = (jsonValue) => {
+    if (checked.value && jsonValue.subpassports && jsonValue.subpassports.length > 0) {
+        jsonValue.subpassports.forEach((subpassport) => {
+            var subpassportKey = Object.keys(subpassport)[0];
+            const desiredJson = subpassport[subpassportKey];
+            loopthroughPassports(desiredJson);
+        });
+    }
+
+    events.value = uniqueEventObjects.value;
+};
+
+watch(checked, (checkValue) => {
+    // if the tEvent data is not empty.
+    if (columnHasBeenClicked.value) {
+        var json = tEvents.timelineEvents.value;
+        var key = Object.keys(json)[0];
+        var desiredJsonValue = json[key];
+        if (checkValue) {
+            // call loopthroughsubpassports
+            determineAddingSubpassportEvents(desiredJsonValue);
+        } else {
+            // call loopthroughpassports
+            events.value = [];
+            loopthroughPassports(desiredJsonValue);
+        }
+    }
+});
+
+watch(tEvents.timelineEvents, (json) => {
+    // temp fix with variable
+    columnHasBeenClicked.value = true;
+
+    var key = Object.keys(json)[0];
+    const desiredJsonValue = json[key];
+
+    loopthroughPassports(desiredJsonValue);
+
+    if (checked.value) {
+        determineAddingSubpassportEvents(desiredJsonValue);
+    }
+
+    timeLineKey.value = key;
     showTimeline.value = events.value.length > 0;
 });
 </script>
 
 <template>
     <div>
-        <h3>Supply Chain Timeline</h3>
+        <div class="container">
+            <span style="font-size: 15pt"> {{ timeLineKey }} Timeline</span>
+            <div class="flex">
+                <span class="pr-1">Show all passport events</span>
+                <InputSwitch v-model="checked" />
+            </div>
+        </div>
         <div v-show="showTimeline">
             <Timeline :value="events" align="alternate" class="customized-timeline">
                 <template #marker="slotProps">
@@ -82,6 +145,12 @@ watch(tEvents.timelineEvents, (json) => {
     position: relative;
     height: 2rem;
     border-radius: 50%;
+}
+
+.container {
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
 }
 
 @media screen and (max-width: 960px) {
