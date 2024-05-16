@@ -4,7 +4,7 @@ import axiosInstance from '../axios';
 export const useDppStore = defineStore('user', {
     state: () => ({
         axios: axiosInstance,
-        dppFullData: 15870,
+        dppFullData: 15870
     }),
     getters: {
         getDppFullData: (state) => state.dppFullData

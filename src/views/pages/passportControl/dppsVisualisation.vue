@@ -22,6 +22,8 @@ const uuid = ref();
 const inputPlaceholder = ref('');
 const dataList = ref();
 
+const events = ref();
+
 onMounted(() => {
     getUrlQueryParams().then(() => {
         // For now the code below is commented because the backend is not working yet.
@@ -77,6 +79,9 @@ const confirmDpp = () => {
 
 const onClickId = (event) => {
     jsonDisplayData.value = event.data.json;
+
+    // Pass through the json data to the timeline component
+    events.value = event.data.json;
 };
 
 const convertJsonToCustomFormat = (jsonData) => {
@@ -85,7 +90,7 @@ const convertJsonToCustomFormat = (jsonData) => {
     const desiredJsonValue = jsonData[key];
     const result = [];
 
-    function processNode(node, passportName, parentName, json, key) {
+    function processNode(node, passportName, parentName, json) {
         var idMatch = node.id.match(/[^:]+$/);
         var idValue = idMatch ? idMatch[0] : null;
 
@@ -173,7 +178,7 @@ const convertJsonToCustomFormat = (jsonData) => {
                 <TabView>
                     <TabPanel header="Supply Chain">
                         <div>
-                            <Timeline></Timeline>
+                            <Timeline :timelineEvents="events"></Timeline>
                         </div>
                     </TabPanel>
                     <TabPanel header="Lifecycle Assessment">

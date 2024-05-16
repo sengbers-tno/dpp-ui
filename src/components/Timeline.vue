@@ -1,42 +1,49 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, defineProps, toRefs, watch } from 'vue';
 
-const events = ref([
-    {
-        status: 'Supplier',
-        date: '15/10/2020 10:30',
-        icon: 'pi pi-shopping-cart',
-        color: '#9C27B0',
-        content: 'Supplier A provides raw materials for manufacturing.'
-    },
-    {
-        status: 'Manufacturer',
-        date: '15/10/2020 14:00',
-        icon: 'pi pi-cog',
-        color: '#673AB7',
-        content: 'The manufacturer produces the t-shirts.'
-    },
-    {
-        status: 'Distributor',
-        date: '15/10/2020 16:15',
-        icon: 'pi pi-shopping-cart',
-        color: '#FF9800',
-        content: 'The distributor handles the logistics and distribution of the t-shirts.'
-    },
-    {
-        status: 'Retailer',
-        date: '16/10/2020 10:00',
-        icon: 'pi pi-check',
-        color: '#607D8B',
-        content: 'The retailer sells the t-shirts to consumers.'
+const props = defineProps({
+    timelineEvents: Object
+});
+
+const tEvents = toRefs(props);
+const events = ref([]);
+const showTimeline = ref(true);
+
+watch(tEvents.timelineEvents, (json) => {
+    events.value = [];
+    var key = Object.keys(json)[0];
+    const desiredJsonValue = json[key];
+
+    const processEvent = (event) => {
+        return {
+            status: event['@type'],
+            date: event['prov:atTime']['@value'],
+            icon: 'pi pi-cog',
+            color: '#9C27B0',
+            content: event['@type']
+        };
+    };
+
+    if (desiredJsonValue.events.ownership) {
+        desiredJsonValue.events.ownership.forEach((ownershipEvent) => {
+            events.value.push(processEvent(ownershipEvent));
+        });
     }
-]);
+
+    if (desiredJsonValue.events.activity) {
+        desiredJsonValue.events.activity.forEach((activityEvent) => {
+            events.value.push(processEvent(activityEvent));
+        });
+    }
+
+    showTimeline.value = events.value.length > 0;
+});
 </script>
 
 <template>
     <div>
-        <h3>T-Shirt Supply Chain Timeline</h3>
-        <div class="">
+        <h3>Supply Chain Timeline</h3>
+        <div v-show="showTimeline">
             <Timeline :value="events" align="alternate" class="customized-timeline">
                 <template #marker="slotProps">
                     <span class="bullet" :style="{ backgroundColor: slotProps.item.color }">
@@ -59,6 +66,9 @@ const events = ref([
                     </Card>
                 </template>
             </Timeline>
+        </div>
+        <div v-show="!showTimeline">
+            <span>There are no event available for this passport</span>
         </div>
     </div>
 </template>
