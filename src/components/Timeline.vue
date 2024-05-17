@@ -5,7 +5,7 @@ const props = defineProps({
     timelineEvents: Object
 });
 
-const tEvents = toRefs(props);
+const timelineEvents = toRefs(props);
 const events = ref([]);
 const showTimeline = ref(true);
 const checked = ref(false);
@@ -65,7 +65,7 @@ const determineAddingSubpassportEvents = (jsonValue) => {
 watch(checked, (checkValue) => {
     // if the tEvent data is not empty.
     if (columnHasBeenClicked.value) {
-        var json = tEvents.timelineEvents.value;
+        var json = timelineEvents.timelineEvents.value;
         var key = Object.keys(json)[0];
         var desiredJsonValue = json[key];
         if (checkValue) {
@@ -79,7 +79,8 @@ watch(checked, (checkValue) => {
     }
 });
 
-watch(tEvents.timelineEvents, (json) => {
+watch(timelineEvents.timelineEvents, (json) => {
+    console.log(json);
     // temp fix with variable
     columnHasBeenClicked.value = true;
 

@@ -4,6 +4,7 @@ import Card from 'primevue/card';
 import Timeline from '@/components/Timeline.vue';
 import LifecycleAssessment from '@/components/LifecycleAssessment.vue';
 import MaterialComposition from '@/components/MaterialComposition.vue';
+import AttachmentsTable from '@/components/AttachmentsTable.vue';
 import { useDppStore } from '@/store/dpp.js';
 
 import dppData from '@/models/templates.json';
@@ -13,16 +14,16 @@ import { useRoute, useRouter } from 'vue-router';
 
 const uuidValue = ref(null);
 const store = useDppStore();
-const nodes = ref();
 const loading = ref(false);
 const jsonDisplayData = ref();
 const route = useRoute();
 const router = useRouter();
 const uuid = ref();
 const inputPlaceholder = ref('');
-const dataList = ref();
+const treeTableDataList = ref();
 
-const events = ref();
+const timelineData = ref();
+const attachmentData = ref();
 
 onMounted(() => {
     getUrlQueryParams().then(() => {
@@ -35,9 +36,8 @@ onMounted(() => {
         loading.value = true;
         var data = JSON.parse(JSON.stringify(dppData));
         jsonDisplayData.value = data;
-        var test = convertJsonToCustomFormat(data);
-        dataList.value = test;
-        nodes.value = test;
+        var treeTableData = convertJsonToCustomFormat(data);
+        treeTableDataList.value = treeTableData;
         loading.value = false;
     });
 });
@@ -56,7 +56,7 @@ async function fetchDppData(uuid) {
             var data = JSON.parse(JSON.stringify(response));
             var result = convertJsonToCustomFormat(data);
             jsonDisplayData.value = data;
-            nodes.value = result;
+            treeTableDataList.value = result;
             loading.value = false;
         });
     } catch (error) {
@@ -77,12 +77,14 @@ const confirmDpp = () => {
     console.log(`Value ${uuidValue.value}`);
 };
 
-const onClickId = (event) => {
-    console.log(event);
-    jsonDisplayData.value = event.data.json;
+const onClickId = (item) => {
+    jsonDisplayData.value = item.data.json;
 
     // Pass through the json data to the timeline component
-    events.value = event.data.json;
+    timelineData.value = item.data.json;
+
+    // fill attachmentData reference
+    attachmentData.value = item.data.json;
 };
 
 const convertJsonToCustomFormat = (jsonData) => {
@@ -161,7 +163,7 @@ const convertJsonToCustomFormat = (jsonData) => {
             </div>
             <div class="pb-3">
                 <Panel header="Product Hierarchy" toggleable>
-                    <TreeTable :value="nodes" :paginator="true" :rows="10" :loading="loading" :resizableColumns="true" dataKey="id">
+                    <TreeTable :value="treeTableDataList" :paginator="true" :rows="10" :loading="loading" :resizableColumns="true" dataKey="id">
                         <Column field="title" header="Type" expander class="column">
                             <template #body="slotProps">
                                 <button class="button" @click="onClickId(slotProps.node)">
@@ -179,7 +181,7 @@ const convertJsonToCustomFormat = (jsonData) => {
                 <TabView>
                     <TabPanel header="Supply Chain">
                         <div>
-                            <Timeline :timelineEvents="events"></Timeline>
+                            <Timeline :timelineEvents="timelineData"></Timeline>
                         </div>
                     </TabPanel>
                     <TabPanel header="Lifecycle Assessment">
@@ -196,7 +198,7 @@ const convertJsonToCustomFormat = (jsonData) => {
                         <div></div>
                     </TabPanel>
                     <TabPanel header="Attachments">
-                        <div></div>
+                        <AttachmentsTable :attachmentEvents="attachmentData"></AttachmentsTable>
                     </TabPanel>
                     <TabPanel header="JSON data">
                         <div>
