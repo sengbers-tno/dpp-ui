@@ -1,6 +1,5 @@
 <script setup>
 import Card from 'primevue/card';
-
 import Timeline from '@/components/Timeline.vue';
 import LifecycleAssessment from '@/components/LifecycleAssessment.vue';
 import MaterialComposition from '@/components/MaterialComposition.vue';
@@ -33,11 +32,15 @@ onMounted(() => {
         //     fetchDppData('03556607-ef11-4c8d-b28f-4b4e65f011fb');
         //     uuidValue.value = uuid.value;
         // }
+
+        // The code below is temporary.
         loading.value = true;
         var data = JSON.parse(JSON.stringify(dppData));
         jsonDisplayData.value = data;
         var treeTableData = convertJsonToCustomFormat(data);
+        inputPlaceholder.value = uuid.value;
         treeTableDataList.value = treeTableData;
+        uuidValue.value = uuid.value;
         loading.value = false;
     });
 });
