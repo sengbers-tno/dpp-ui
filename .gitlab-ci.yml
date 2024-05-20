@@ -41,6 +41,7 @@ deploy:
       /kaniko/executor --cache=${IMAGE_CACHE} --context=${IMAGE_CONTEXT}
       --dockerfile=${IMAGE_CONTAINERFILE}
       --destination=${IMAGE_NAME}:${DEV_TAG}
+      --destination=${IMAGE_NAME}:latest
       --destination=${IMAGE_NAME}:${TAG} ${KANIKO_EXTRA_ARGS}
   # only:
   #   - main
