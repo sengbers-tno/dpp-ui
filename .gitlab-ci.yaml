@@ -1,0 +1,52 @@
+image: node:latest
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  IMAGE_NAME: $CI_REGISTRY_IMAGE
+  TAG: $CI_COMMIT_SHORT_SHA
+  DEV_TAG: "dev-$CI_COMMIT_SHORT_SHA"
+  IMAGE_CACHE: "true"
+  IMAGE_CONTEXT: "."
+  IMAGE_CONTAINERFILE: "Dockerfile"
+  KANIKO_EXTRA_ARGS: ""
+
+before_script:
+  - curl -sL https://unpkg.com/@pnpm/self-installer | node
+  - pnpm install
+
+build:
+  stage: build
+  script:
+    - pnpm run build
+  artifacts:
+    paths:
+      - dist/
+
+test:
+  stage: test
+  script:
+    - pnpm run test
+    - echo "Tests completed"
+
+deploy:
+  stage: deploy
+  image:
+    name: gcr.io/kaniko-project/executor:latest
+    entrypoint: [""]
+  script:
+    - >-
+      echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}"
+      > /kaniko/.docker/config.json
+    - echo "Using Kaniko to build and push the Docker image"
+    - /kaniko/executor version
+    - >-
+      /kaniko/executor --cache=${IMAGE_CACHE} --context=${IMAGE_CONTEXT}
+      --dockerfile=${IMAGE_CONTAINERFILE}
+      --destination=${IMAGE_NAME}:${DEV_TAG}
+      --destination=${IMAGE_NAME}:${TAG} ${KANIKO_EXTRA_ARGS}
+  # only:
+  #   - main
