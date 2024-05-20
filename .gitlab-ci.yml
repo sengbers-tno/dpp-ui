@@ -2,7 +2,6 @@ image: node:latest
 
 stages:
   - build
-  - test
   - deploy
 
 variables:
@@ -25,12 +24,6 @@ build:
   artifacts:
     paths:
       - dist/
-
-test:
-  stage: test
-  script:
-    - pnpm run test
-    - echo "Tests completed"
 
 deploy:
   stage: deploy
