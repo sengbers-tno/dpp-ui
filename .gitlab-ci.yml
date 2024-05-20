@@ -13,12 +13,13 @@ variables:
   IMAGE_CONTAINERFILE: "Dockerfile"
   KANIKO_EXTRA_ARGS: ""
 
-before_script:
-  - curl -sL https://unpkg.com/@pnpm/self-installer | node
-  - pnpm install
+
 
 build:
   stage: build
+  before_script:
+    - curl -sL https://unpkg.com/@pnpm/self-installer | node
+    - pnpm install
   script:
     - pnpm run build
   artifacts:
@@ -28,8 +29,8 @@ build:
 deploy:
   stage: deploy
   image:
-    name: gcr.io/kaniko-project/executor:latest
-    entrypoint: [""]
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]  # Kaniko does not use a shell entrypoint
   script:
     - >-
       echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${CI_REGISTRY_USER}:${CI_REGISTRY_PASSWORD} | base64)\"}}}"
