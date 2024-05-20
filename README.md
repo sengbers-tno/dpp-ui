@@ -1,4 +1,22 @@
-This template should help get you started developing with Vue 3 in Vite.
+# DPP Dashboard repository
+
+This is an example frontend for the DPP Data Repository, built to demonstrate the range of functionalities of the DPP infrastructure.
+
+To run the frontend in dev-mode, follow the default instructions in the next section.
+
+To run a containerized version of the frontend, use the following commands
+
+To build:
+
+```shell
+docker build -t dpp-dashboard:latest .
+```
+
+To run:
+
+```shell
+docker run -it -d -p 80:80 dpp-dashboard
+```
 
 ## Customize configuration
 
