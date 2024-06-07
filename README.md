@@ -45,3 +45,11 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## Roadmap
+
+- Develop and reference templates from the Semantic Treehouse API
+- Reference local templates for DPP initialization
+- CRUD on attachments, credentials in the UI.
+- Dynamic Plugin system, based on type of Product. Enable choosing visualization scheme if not auto-selected.
+- Enable updating DPP with events, attachments, credentials, integrations.

@@ -2,10 +2,11 @@ import { toRefs, reactive, computed } from 'vue';
 
 const layoutConfig = reactive({
     ripple: true,
-    darkTheme: true,
+    darkTheme: false,
     inputStyle: 'outlined',
     menuMode: 'static',
-    theme: 'aura-dark-green',
+    // theme: 'aura-dark-green',
+    theme: 'aura-light-green',
     scale: 14,
     activeMenuItem: null
 });

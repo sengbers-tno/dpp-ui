@@ -1,15 +1,16 @@
 <script setup>
-import { useLayout } from '@/layout/composables/layout';
-import { ref, computed } from 'vue';
+    // import { useLayout } from '@/layout/composables/layout';
+    import { ref, computed } from 'vue';
 
-const { layoutConfig } = useLayout();
-const email = ref('');
-const password = ref('');
-const checked = ref(false);
+    // const { layoutConfig } = useLayout();
+    const email = ref('');
+    const password = ref('');
+    const checked = ref(false);
 
-const logoUrl = computed(() => {
-    return `/src/assets/${layoutConfig.darkTheme.value ? 'Ai matters logo' : 'Ai matters logo'}.svg`;
-});
+    const logoUrl = computed(() => {
+        // return `/src/assets/${layoutConfig.darkTheme.value ? 'project-logo' : 'project-logo'}.svg`;
+        return `/src/assets/project-logo.svg`;
+    });
 </script>
 
 <template>
@@ -47,13 +48,13 @@ const logoUrl = computed(() => {
 </template>
 
 <style scoped>
-.pi-eye {
-    transform: scale(1.6);
-    margin-right: 1rem;
-}
+    .pi-eye {
+        transform: scale(1.6);
+        margin-right: 1rem;
+    }
 
-.pi-eye-slash {
-    transform: scale(1.6);
-    margin-right: 1rem;
-}
+    .pi-eye-slash {
+        transform: scale(1.6);
+        margin-right: 1rem;
+    }
 </style>

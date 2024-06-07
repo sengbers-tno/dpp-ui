@@ -1,41 +1,90 @@
 <script setup>
-import { ref } from 'vue';
+    import { ref } from 'vue';
 
-import AppMenuItem from './AppMenuItem.vue';
+    import AppMenuItem from './AppMenuItem.vue';
 
-const model = ref([
-    {
-        label: 'Template Control',
-        items: [
-            { label: 'Template List', icon: 'pi pi-fw pi-home', to: '/templateControl/templateList' },
-            { label: 'Template Creation', icon: 'pi pi-fw pi-home', to: '/templateControl/templateCreation' }
-        ]
-    },
-    {
-        label: 'Event Control',
-        items: [
-            { label: 'Event Lifecycle List', icon: 'pi pi-fw pi-id-card', to: '/eventControl/eventLifecycleList' },
-            { label: 'Add Event Type', icon: 'pi pi-fw pi-check-square', to: '/eventControl/addEventType' }
-        ]
-    },
-    {
-        label: 'Passport Control',
-        items: [
-            { label: 'DPP Visualisation', icon: 'pi pi-fw pi-globe', to: '/passportControl/dppsVisualisation' },
-            { label: 'DPP Form', icon: 'pi pi-fw pi-eye', to: '/passportControl/dppsForm' },
-            { label: 'DPP View', icon: 'pi pi-fw pi-eye', to: '/passportControl/uuidView' },
-            { label: 'DPP Update', icon: 'pi pi-fw pi-eye', to: '/passportControl/uuidUpdate' },
-            { label: 'Aggregate Statistics', icon: 'pi pi-fw pi-eye', to: '/passportControl/aggregateStatistics' },
-            { label: 'Visualise Random', icon: 'pi pi-fw pi-globe', to: '/passportControl/visualiseRandom' }
-        ]
-    },
-    {
-        label: 'Credential Control',
-        items: [{ label: 'List', icon: 'pi pi-fw pi-prime', to: '/credentialControl/list' }]
-    }
-]);
+    const model = ref([
+        {
+            label: 'Home',
+            items: [
+                { label: 'Digital Product Passports', icon: 'pi pi-fw pi-book', to: '/' },
+                { label: 'About TNO', icon: 'pi pi-fw pi-info-circle', to: '/about' },
+                { label: 'Technical introduction', icon: 'pi pi-fw pi-desktop', to: '/technical-intro' }
+            ]
+        },
+        {
+            label: 'Passports',
+            items: [
+                { label: 'List Passports', icon: 'pi pi-fw pi-id-card', to: '/dpps/list' }, // ID card for representing a "passport".
+                { label: 'Visualize', icon: 'pi pi-fw pi-eye', to: '/dpps/visualize' }, // Eye for visualizing.
+                { label: 'Update', icon: 'pi pi-fw pi-refresh', to: '/dpps/update' }, // Refresh for updating.
+                { label: 'Create', icon: 'pi pi-fw pi-pencil', to: '/dpps/create' }, // Pencil for creating.
+                { label: 'Repository Statistics', icon: 'pi pi-fw pi-chart-bar', to: '/dpps/statistics' } // Chart bar for statistics.
+            ]
+        },
+        {
+            label: 'Passport Templates',
+            items: [
+                { label: 'List Templates', icon: 'pi pi-fw pi-th-large', to: '/templates/list' },
+                { label: 'Create Template', icon: 'pi pi-fw pi-file-edit', to: '/templates/create' },
+                { label: 'Template Statistics', icon: 'pi pi-fw pi-chart-bar', to: '/templates/statistics' }
+            ]
+        },
+        {
+            label: 'Credentials',
+            items: [{ label: 'List', icon: 'pi pi-fw pi-id-card', to: '/credentials/list' }]
+        },
+        {
+            label: 'Configuration',
+            items: [{ label: 'Edit', icon: 'pi pi-fw pi-cog', to: '/config' }]
+        }
+    ]);
+    // const model = ref([
+    //     {
+    //         label: 'Home',
+    //         items: [
+    //             // Core introduction to Digital Product Passports
+    //             { label: 'Digital Product Passports', icon: 'pi pi-fw pi-globe', to: '/' },
+    //             // Configuration of metadata about the UI. Backend URL, dark-light mode, etc.
+    //             { label: 'Configuration', icon: 'pi pi-fw pi-eye', to: '/config' }
+    //         ]
+    //     },
+    //     {
+    //         label: 'Passports',
+    //         items: [
+    //             // Some information about identifying some general information about Passports currently in the repository.
+    //             { label: 'List Passports', icon: 'pi pi-fw pi-globe', to: '/dpps/list' },
+    //             // Visualize DPP. Get an ID from a modal to a tangible DPP based on some filters.
+    //             { label: 'Visualize', icon: 'pi pi-fw pi-globe', to: '/dpps/visualize' },
+    //             { label: 'Update', icon: 'pi pi-fw pi-eye', to: '/dpps/update' },
+    //             { label: 'Create', icon: 'pi pi-fw pi-eye', to: '/dpps/create' },
+    //             { label: 'Repository Statistics', icon: 'pi pi-fw pi-eye', to: '/dpps/statistics' }
+    //         ]
+    //     },
+    //     {
+    //         label: 'Passport Templates',
+    //         items: [
+    //             { label: 'List Templates', icon: 'pi pi-fw pi-home', to: '/templates/list' },
+    //             { label: 'Create Template', icon: 'pi pi-fw pi-home', to: '/templates/create' },
+    //             { label: 'Template Statistics', icon: 'pi pi-fw pi-home', to: '/templates/statistics' }
+    //         ]
+    //     },
+    //     {
+    //         label: 'Credentials',
+    //         items: [{ label: 'List', icon: 'pi pi-fw pi-prime', to: '/credentials/list' }]
+    //     }
+    // ]);
 </script>
 
+<!-- // {
+    // { label: 'DPP View', icon: 'pi pi-fw pi-eye', to: '/passportControl/uuidView' },
+    // { label: 'Visualise Random', icon: 'pi pi-fw pi-globe', to: '/passportControl/visualiseRandom' }
+//     label: 'Event',
+//     items: [
+//         { label: 'Event Lifecycle List', icon: 'pi pi-fw pi-id-card', to: '/eventControl/eventLifecycleList' },
+//         { label: 'Add Event Type', icon: 'pi pi-fw pi-check-square', to: '/eventControl/addEventType' }
+//     ]
+// }, -->
 <template>
     <ul class="layout-menu">
         <template v-for="(item, i) in model" :key="item">

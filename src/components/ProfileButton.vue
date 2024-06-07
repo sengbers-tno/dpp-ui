@@ -1,65 +1,65 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+    import { ref } from 'vue';
+    import { useRouter } from 'vue-router';
 
-const router = useRouter();
+    const router = useRouter();
 
-const menu = ref();
-const items = ref([
-    {
-        label: 'Users',
-        items: [
-            {
-                name: 'Alice',
-                icon: 'pi pi-user',
-                role: 'Admin'
-            },
-            {
-                name: 'Bob',
-                icon: 'pi pi-user',
-                role: 'Viewer'
-            },
-            {
-                name: 'Liam',
-                icon: 'pi pi-user',
-                role: 'Editor'
-            }
-        ]
-    },
-    {
-        separator: true
-    },
-    {
-        label: 'Profile',
-        items: [
-            {
-                name: 'Settings',
-                icon: 'pi pi-cog',
-                command: () => {
-                    router.push('/profile');
+    const menu = ref();
+    const items = ref([
+        {
+            label: 'Users',
+            items: [
+                {
+                    name: 'Alice',
+                    icon: 'pi pi-user',
+                    role: 'Admin'
+                },
+                {
+                    name: 'Bob',
+                    icon: 'pi pi-user',
+                    role: 'Viewer'
+                },
+                {
+                    name: 'Liam',
+                    icon: 'pi pi-user',
+                    role: 'Editor'
                 }
-            },
-            {
-                name: 'Logout',
-                icon: 'pi pi-sign-out',
-                command: () => {
-                    router.push('/');
+            ]
+        },
+        {
+            separator: true
+        },
+        {
+            label: 'Profile',
+            items: [
+                {
+                    name: 'Settings',
+                    icon: 'pi pi-cog',
+                    command: () => {
+                        router.push('/profile');
+                    }
+                },
+                {
+                    name: 'Logout',
+                    icon: 'pi pi-sign-out',
+                    command: () => {
+                        router.push('/');
+                    }
                 }
-            }
-        ]
-    }
-]);
+            ]
+        }
+    ]);
 
-const toggle = (event) => {
-    menu.value.toggle(event);
-};
+    const toggle = (event) => {
+        menu.value.toggle(event);
+    };
 
-const selectedItem = ref(null);
-const handleMenuItemClick = (item) => {
-    if (item.role) {
-        selectedItem.value = item;
-    }
-};
+    const selectedItem = ref(null);
+    const handleMenuItemClick = (item) => {
+        if (item.role) {
+            selectedItem.value = item;
+        }
+    };
 </script>
 
 <template>

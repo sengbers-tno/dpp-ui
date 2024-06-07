@@ -11,33 +11,105 @@ export const useDppStore = defineStore('user', {
     },
     actions: {
         // create a DPP with basic attributes.
-        async createDpp(template_id_short) {
+        // async createDpp(template_id_short) {
+        //     try {
+        //         await this.axios
+        //             .post(
+        //                 `dpps/${template_id_short}`,
+        //                 {
+        //                     title: 'dpp1'
+        //                 },
+        //                 {
+        //                     params: {
+        //                         version: 'latest'
+        //                     }
+        //                 }
+        //             )
+        //             .then((response) => {
+        //                 console.log(response.data);
+        //             });
+        //     } catch (error) {
+        //         alert(error);
+        //         console.log(error);
+        //     }
+        // },
+        // Compact pull with no signature.
+        // async getCompactDpp(uuid) {
+        //     try {
+        //         await this.axios.get(`dpps/${uuid}/compact`).then((response) => {
+        //             console.log(response.data);
+        //         });
+        //     } catch (error) {
+        //         alert(error);
+        //         console.log(error);
+        //     }
+        // },
+
+        async getMetadata() {
             try {
-                await this.axios
-                    .post(
-                        `dpps/${template_id_short}`,
-                        {
-                            title: 'dpp1'
-                        },
-                        {
-                            params: {
-                                version: 'latest'
-                            }
-                        }
-                    )
-                    .then((response) => {
-                        console.log(response.data);
-                    });
+                const response = await this.axios.get(`dpps/metadata`);
+                console.log(response.data);
+                return response.data; // Ensure the data is returned here
             } catch (error) {
-                alert(error);
-                console.log(error);
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
+            }
+        },
+
+        async searchBackend(filterConditions) {
+            try {
+                const response = await this.axios.post(`dpps/search`, filterConditions);
+                console.log(response.data);
+                return response.data;
+            } catch (error) {
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
+            }
+        },
+
+        async getCompactDpp(uuid) {
+            try {
+                const response = await this.axios.get(`dpps/${uuid}/compact`);
+                console.log(response.data);
+                return response.data; // Ensure the data is returned here
+            } catch (error) {
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
             }
         },
         // Basic compact pull with no signature.
-        async getBasicCompactDpp(uuid) {
+        async getBasicDpp(uuid) {
             try {
                 await this.axios.get(`dpps/${uuid}`).then((response) => {
                     console.log(response.data);
+                    return response.data;
                 });
             } catch (error) {
                 alert(error);
@@ -45,65 +117,161 @@ export const useDppStore = defineStore('user', {
             }
         },
         // Get Bom of requested dpp.
-        async getDppBom(uuid) {
-            try {
-                await this.axios.get(`dpps/${uuid}/bom`).then((response) => {
-                    console.log(response.data);
-                });
-            } catch (error) {
-                alert(error);
-                console.log(error);
-            }
-        },
+        // async getDppBom(uuid) {
+        //     try {
+        //         await this.axios.get(`dpps/${uuid}/bom`).then((response) => {
+        //             console.log(response.data);
+        //         });
+        //     } catch (error) {
+        //         alert(error);
+        //         console.log(error);
+        //     }
+        // },
         // Basic compact pull with self-signature.
-        async getSelfSignedCompactDpp(uuid) {
-            try {
-                await this.axios.get(`dpps/${uuid}/self-signed`).then((response) => {
-                    console.log(response.data);
-                });
-            } catch (error) {
-                alert(error);
-                console.log(error);
-            }
-        },
-        // Compact pull with embedded signatures from wallet in response to a challenge nonce.
-        async getSignedBasicCompactDpp(uuid) {
-            try {
-                await this.axios.get(`dpps/${uuid}/signed`).then((response) => {
-                    console.log(response.data);
-                });
-            } catch (error) {
-                alert(error);
-                console.log(error);
-            }
-        },
+        // async getSelfSignedCompactDpp(uuid) {
+        //     try {
+        //         await this.axios.get(`dpps/${uuid}/self-signed`).then((response) => {
+        //             console.log(response.data);
+        //         });
+        //     } catch (error) {
+        //         alert(error);
+        //         console.log(error);
+        //     }
+        // },
+        // // Compact pull with embedded signatures from wallet in response to a challenge nonce.
+        // async getSignedBasicCompactDpp(uuid) {
+        //     try {
+        //         await this.axios.get(`dpps/${uuid}/signed`).then((response) => {
+        //             console.log(response.data);
+        //         });
+        //     } catch (error) {
+        //         alert(error);
+        //         console.log(error);
+        //     }
+        // },
         // Pull dpp with all attachment links and images attached.
         async getFullDpp(uuid) {
             try {
-                await this.axios.get(`dpps/${uuid}/full`).then((response) => {
-                    console.log(response.data);
-                    this.dppFullData = response.data;
-                });
+                const response = await this.axios.get(`dpps/${uuid}/full`);
+                console.log(response.data);
+                return response.data; // Ensure the data is returned here
             } catch (error) {
-                alert(error);
-                console.log(error);
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
+            }
+        },
+        async getDppAttributes(uuid) {
+            try {
+                const response = await this.axios.get(`dpps/${uuid}/attributes`);
+                console.log(response.data);
+                return response.data; // Ensure the data is returned here
+            } catch (error) {
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
+            }
+        },
+        async getDppGeneralData(uuid) {
+            try {
+                const response = await this.axios.get(`dpps/${uuid}/general`);
+                console.log(response.data);
+                return response.data; // Ensure the data is returned here
+            } catch (error) {
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
+            }
+        },
+        async getDppCredentials(uuid) {
+            try {
+                const response = await this.axios.get(`dpps/${uuid}/credentials`);
+                console.log(response.data);
+                return response.data; // Ensure the data is returned here
+            } catch (error) {
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
             }
         },
         // Get the last DPP that was generated.
-        async getLatestDpp(uuid) {
+        async getLatestDpp() {
             try {
-                await this.axios.get(`dpps/${uuid}/latest`).then((response) => {
-                    console.log(response.data);
-                });
+                console.log(this.axios.getUri());
+                const response = await this.axios.get('dpps/latest');
+                console.log(response.data);
+                return response.data.result;
             } catch (error) {
-                alert(error);
-                console.log(error);
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
             }
         },
         // Get a random DPP based on available IDs in the graph_db.
-        async getRandomDpp(uuid) {
+        async getRandomDpp() {
             try {
-                await this.axios.get(`dpps/${uuid}/random`).then((response) => {
+                console.log(this.axios.getUri());
+                const response = await this.axios.get('dpps/random');
+                console.log(response.data);
+                return response.data.result; // Extract and return the `result` field
+            } catch (error) {
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
+            }
+        },
+        // Add event of type that matches the registered types in the registered version.
+        async addDppActivityEvent(uuid, event) {
+            try {
+                await this.axios.post(`dpps/${uuid}/events/activity`, event).then((response) => {
                     console.log(response.data);
                 });
             } catch (error) {
@@ -112,24 +280,9 @@ export const useDppStore = defineStore('user', {
             }
         },
         // Add event of type that matches the registered types in the registered version.
-        async addDppEvent(uuid) {
+        async addDppOwnershipEvent(uuid, event) {
             try {
-                await this.axios
-                    .post(`dpps/${uuid}/events`, {
-                        uuid: this.uuid,
-                        name: 'first event'
-                    })
-                    .then((response) => {
-                        console.log(response.data);
-                    });
-            } catch (error) {
-                alert(error);
-                console.log(error);
-            }
-        },
-        async getDppAttachments(uuid) {
-            try {
-                await this.axios.get(`dpps/${uuid}/attachments`).then((response) => {
+                await this.axios.post(`dpps/${uuid}/events/ownership`, event).then((response) => {
                     console.log(response.data);
                 });
             } catch (error) {
@@ -137,9 +290,10 @@ export const useDppStore = defineStore('user', {
                 console.log(error);
             }
         },
-        async putDppAttachments(uuid, attachment_id) {
+
+        async getDppOwnershipEvents(uuid) {
             try {
-                await this.axios.get(`dpps/${uuid}/attachments/${attachment_id}`).then((response) => {
+                await this.axios.get(`dpps/${uuid}/events/ownership`).then((response) => {
                     console.log(response.data);
                 });
             } catch (error) {
@@ -147,34 +301,7 @@ export const useDppStore = defineStore('user', {
                 console.log(error);
             }
         },
-        // Add a file that is stored with a reference to it added to the DPP itself.
-        async addDppAttachments(uuid, file) {
-            try {
-                var formData = new FormData();
-                formData.append('file', file);
-                await this.axios
-                    .post(
-                        `dpps/${uuid}/attachments`,
-                        {
-                            name: 'filename',
-                            attachment: formData
-                        },
-                        {
-                            headers: {
-                                'Content-Type': 'multipart/form-data'
-                            }
-                        }
-                    )
-                    .then((response) => {
-                        console.log(response.data);
-                    });
-            } catch (error) {
-                alert(error);
-                console.log(error);
-            }
-        },
-        // Get just the activity subset of data about the given DPP uuid.
-        async getDppActivities(uuid) {
+        async getDppActivityEvents(uuid) {
             try {
                 await this.axios.get(`dpps/${uuid}/events/activity`).then((response) => {
                     console.log(response.data);
@@ -184,10 +311,10 @@ export const useDppStore = defineStore('user', {
                 console.log(error);
             }
         },
-        // Get just the ownership subset of data about the given DPP uuid.
-        async getDppOwnership(uuid) {
+
+        async getDppAttachments(uuid) {
             try {
-                await this.axios.get(`dpps/${uuid}/events/ownership`).then((response) => {
+                await this.axios.get(`dpps/${uuid}/attachments`).then((response) => {
                     console.log(response.data);
                 });
             } catch (error) {
@@ -195,5 +322,43 @@ export const useDppStore = defineStore('user', {
                 console.log(error);
             }
         }
+        // async putDppAttachments(uuid, attachment_id) {
+        //     try {
+        //         await this.axios.get(`dpps/${uuid}/attachments/${attachment_id}`).then((response) => {
+        //             console.log(response.data);
+        //         });
+        //     } catch (error) {
+        //         alert(error);
+        //         console.log(error);
+        //     }
+        // },
+
+        // // Add a file that is stored with a reference to it added to the DPP itself.
+        // async addDppAttachments(uuid, file) {
+        //     try {
+        //         var formData = new FormData();
+        //         formData.append('file', file);
+        //         await this.axios
+        //             .post(
+        //                 `dpps/${uuid}/attachments`,
+        //                 {
+        //                     name: 'filename',
+        //                     attachment: formData
+        //                 },
+        //                 {
+        //                     headers: {
+        //                         'Content-Type': 'multipart/form-data'
+        //                     }
+        //                 }
+        //             )
+        //             .then((response) => {
+        //                 console.log(response.data);
+        //             });
+        //     } catch (error) {
+        //         alert(error);
+        //         console.log(error);
+        //     }
+        // },
+        // Get just the activity subset of data about the given DPP uuid.
     }
 });
