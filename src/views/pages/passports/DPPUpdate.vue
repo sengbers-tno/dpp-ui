@@ -4,6 +4,7 @@
     import { useDppStore } from '@/store/dpp.js';
     // import { useRoute, useRouter } from 'vue-router';
     import { useToast } from 'primevue/usetoast';
+    import AddEvent from '../eventControl/AddEvent.vue';
     const toast = useToast();
     const uuidValue = ref(null);
     const store = useDppStore();
@@ -100,14 +101,15 @@
     // };
 </script>
 <template>
-    <!-- <Toast /> -->
+    <Toast />
     <Card>
         <template #content>
+            <h3>Update Digital Product Passports</h3>
+            <Message severity="warn" :closable="false">Work in progress! This page is not yet complete.</Message>
             <div id="id-panel" class="pb-3">
-                <Panel header="Update Digital Product Passport" toggleable>
-                    <small id="productUuid-help"><p>Start typing to immediately get recommendations for DPP IDs known in the database. Use the filters to get filtered suggestions!</p></small>
+                <Panel>
                     <div class="p-fluid grid">
-                        <div class="field col-12 md:col-9">
+                        <div class="field col-12 md:col-12">
                             <label for="productUuid">Product UUID</label>
                             <InputGroup>
                                 <AutoComplete id="productUuid" v-model="uuidValue" :suggestions="filteredSuggestions" @complete="searchUUID" field="label" :placeholder="inputPlaceholder" aria-describedby="productUuid-help" />
@@ -118,8 +120,9 @@
                         <!-- <div class="field col-12 md:col-3 flex align-items-end">
                             <Button title="Fetch random!" label="Random" @click="randomDpp" />
                             <Button title="Fetch last published" label="Last created" @click="latestDpp" />
-                        </div> -->
+                            </div> -->
                     </div>
+                    <small id="starting-text">Start typing to immediately get recommendations for DPP IDs known in the database. Use the filters to get filtered suggestions!</small>
                     <Fieldset legend="Additional Filters" toggleable collapsed>
                         <div class="p-fluid grid">
                             <div class="field col-12 md:col-4">
@@ -159,37 +162,35 @@
                 <Panel header="Details" toggleable>
                     <!-- <TabView :activeIndex="activeTabIndex" @tab-change="onTabChange"> -->
                     <TabView>
-                        <TabPanel header="General">
+                        <!-- <TabPanel header="General" :disabled="true">
                             <div>
                                 <pre>{{ generalData }}</pre>
                             </div>
-                        </TabPanel>
+                        </TabPanel> -->
                         <TabPanel header="Events">
-                            <TabView>
-                                <TabPanel header="Add">
+                            <AddEvent :uuidValue="uuidValue.value"></AddEvent>
+                            <!-- <TabView>
+                                <TabPanel header="">
                                     <Textarea v-model="createEvent" autoResize rows="5" cols="30" />
                                 </TabPanel>
                                 <TabPanel header="Create">
                                     <Textarea v-model="addEvent" autoResize rows="5" cols="30" />
                                 </TabPanel>
-                            </TabView>
-
-                            <div>
-                                <Timeline :timelineEvents="timelineData"></Timeline>
-                            </div>
+                            </TabView> -->
                         </TabPanel>
-                        <TabPanel header="Attributes">
+                        <TabPanel header="Attributes" :disabled="true">
                             <div>
-                                <pre>{{ attributeDisplayData }}</pre>
+                                <!-- <pre>{{ attributeDisplayData }}</pre> -->
                                 <!-- <LifecycleAssessment></LifecycleAssessment> -->
                             </div>
                         </TabPanel>
-                        <TabPanel header="Credentials">
-                            <CredentialsTable :attachmentEvents="credentialData"></CredentialsTable>
+                        <TabPanel header="Credentials" :disabled="true">
+                            <!-- <CredentialsTable :attachmentEvents="credentialData"></CredentialsTable> -->
                         </TabPanel>
-                        <TabPanel header="Attachments">
-                            <AttachmentsTable :attachmentEvents="attachmentData"></AttachmentsTable>
+                        <TabPanel header="Attachments" :disabled="true">
+                            <!-- <AttachmentsTable :attachmentEvents="attachmentData"></AttachmentsTable> -->
                         </TabPanel>
+                        <TabPanel header="Subpassports" :disabled="true"> </TabPanel>
                     </TabView>
                 </Panel>
             </div>

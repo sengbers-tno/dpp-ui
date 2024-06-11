@@ -271,12 +271,22 @@ export const useDppStore = defineStore('user', {
         // Add event of type that matches the registered types in the registered version.
         async addDppActivityEvent(uuid, event) {
             try {
-                await this.axios.post(`dpps/${uuid}/events/activity`, event).then((response) => {
-                    console.log(response.data);
-                });
+                console.log(this.axios.getUri());
+                const response = await this.axios.post(`dpps/${uuid}/events/activity`, event);
+                console.log(response.data);
+                return response.data.result; // Extract and return the `result` field
             } catch (error) {
-                alert(error);
-                console.log(error);
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
             }
         },
         // Add event of type that matches the registered types in the registered version.

@@ -8,15 +8,14 @@
     const timelineEvents = toRefs(props);
     const events = ref([]);
     const showTimeline = ref(true);
-    const checked = ref(false);
     const timeLineKey = ref('');
     const columnHasBeenClicked = ref(false);
 
-    const options = ref([
-        { name: 'Activity', value: 'activity' },
-        { name: 'Ownership', value: 'ownership' }
-    ]);
-    const selectedEventTypes = ref(['activity', 'ownership']);
+    // const options = ref([
+    //     { name: 'Activity', value: 'activity' },
+    //     { name: 'Ownership', value: 'ownership' }
+    // ]);
+    // const selectedEventTypes = ref(['activity', 'ownership']);
     const uniqueEventObjects = computed(() => {
         const seenIds = new Set();
         return events.value.filter((obj) => {
@@ -33,7 +32,7 @@
         const date = event['prov:endedAtTime'] ? event['prov:endedAtTime']['@value'] : event['prov:atTime'] ? event['prov:atTime']['@value'] : null;
 
         // Determine the color based on the event type
-        const color = event['@type'].startsWith('dpp:') ? '#ADD8E6' : '#90EE90'; // pastel blue for dpp, pastel green otherwise
+        const color = event['@type'].startsWith('dpp:') ? '#ADD8E6' : event['@type'].startsWith('aitef:') ? '#FFDAB9' : '#90EE90'; // pastel blue for dpp, pastel orange for aitef, pastel green otherwise
 
         // Determine the icon based on the event type
         let icon;
@@ -126,48 +125,48 @@
         events.value = uniqueEventObjects.value;
     };
 
-    const determineAddingSubpassportEvents = (jsonValue) => {
-        if (checked.value && jsonValue.subpassports && jsonValue.subpassports.length > 0) {
-            jsonValue.subpassports.forEach((subpassport) => {
-                var subpassportKey = Object.keys(subpassport)[0];
-                const desiredJson = subpassport[subpassportKey];
-                loopthroughPassports(desiredJson);
-            });
-        }
+    // const determineAddingSubpassportEvents = (jsonValue) => {
+    //     if (checked.value && jsonValue.subpassports && jsonValue.subpassports.length > 0) {
+    //         jsonValue.subpassports.forEach((subpassport) => {
+    //             var subpassportKey = Object.keys(subpassport)[0];
+    //             const desiredJson = subpassport[subpassportKey];
+    //             loopthroughPassports(desiredJson);
+    //         });
+    //     }
 
-        events.value = uniqueEventObjects.value;
-    };
+    //     events.value = uniqueEventObjects.value;
+    // };
 
-    watch(checked, (checkValue) => {
-        // if the tEvent data is not empty.
-        if (columnHasBeenClicked.value) {
-            var json = timelineEvents.timelineEvents.value;
-            var key = Object.keys(json)[0];
-            var desiredJsonValue = json[key];
-            if (checkValue) {
-                // call loopthroughsubpassports
-                determineAddingSubpassportEvents(desiredJsonValue);
-            } else {
-                // call loopthroughpassports
-                events.value = [];
-                loopthroughPassports(desiredJsonValue);
-            }
-        }
-    });
+    // watch(checked, (checkValue) => {
+    //     // if the tEvent data is not empty.
+    //     if (columnHasBeenClicked.value) {
+    //         var json = timelineEvents.timelineEvents.value;
+    //         var key = Object.keys(json)[0];
+    //         var desiredJsonValue = json[key];
+    //         if (checkValue) {
+    //             // call loopthroughsubpassports
+    //             determineAddingSubpassportEvents(desiredJsonValue);
+    //         } else {
+    //             // call loopthroughpassports
+    //             events.value = [];
+    //             loopthroughPassports(desiredJsonValue);
+    //         }
+    //     }
+    // });
 
     watch(timelineEvents.timelineEvents, (json) => {
         console.log(json);
         // temp fix with variable
         columnHasBeenClicked.value = true;
-
+        events.value = [];
         var key = Object.keys(json)[0];
         const desiredJsonValue = json[key];
 
         loopthroughPassports(desiredJsonValue);
 
-        if (checked.value) {
-            determineAddingSubpassportEvents(desiredJsonValue);
-        }
+        // if (checked.value) {
+        //     determineAddingSubpassportEvents(desiredJsonValue);
+        // }
 
         timeLineKey.value = key;
         // showTimeline.value = events.value.length > 0;
@@ -176,20 +175,15 @@
 
 <template>
     <div>
-        <div v-show="showTimeline" class="container justify-content-center">
-            <!-- <span style="font-size: 15pt"> {{ timeLineKey }} Timeline</span> -->
+        <!-- <div v-show="showTimeline" class="container justify-content-center">
             <div class="flex justify-content-center">
                 <SelectButton v-model="selectedEventTypes" :options="options" optionLabel="name" multiple aria-labelledby="multiple" />
-                <!-- <span class="pr-1">Show all passport events</span> -->
             </div>
-            <!-- <div>
-                <InputSwitch v-model="checked" />
-            </div> -->
-        </div>
+        </div> -->
         <div>
             <Timeline :value="events" align="alternate" class="customized-timeline">
                 <template #marker="slotProps">
-                    <span class="bullet" :style="{ backgroundColor: slotProps.item.color }">
+                    <span class="bullet" :style="{ backgroundColor: slotProps.item.color, color: 'black' }">
                         <i :class="slotProps.item.icon"></i>
                     </span>
                 </template>
@@ -197,14 +191,12 @@
                     <Card class="mt-3">
                         <template #title>
                             <Tag :value="slotProps.item.tag" :style="{ backgroundColor: slotProps.item.color, color: 'black' }"></Tag>
-                            <!-- <Tag severity="info" :value="slotProps.item.tag"></Tag> -->
                             {{ slotProps.item.status }}
                         </template>
                         <template #subtitle>
                             {{ slotProps.item.date }}
                         </template>
                         <template #content>
-                            <!-- <Tag severity="info" :value="slotProps.item.tag"></Tag> -->
                             <p class="m-0">
                                 {{ slotProps.item.content }}
                             </p>
@@ -212,51 +204,6 @@
                     </Card>
                 </template>
             </Timeline>
-            <!-- <Timeline :value="events" align="alternate" class="customized-timeline">
-                <template #marker="slotProps">
-                    <span class="bullet" :style="{ backgroundColor: slotProps.item.color }">
-                        <i :class="slotProps.item.icon"></i>
-                    </span>
-                </template>
-                <template #content="slotProps">
-                    <Card class="mt-3">
-                        <template #title>
-                            {{ slotProps.item.status }}
-                        </template>
-                        <template #subtitle>
-                            {{ slotProps.item.date }}
-                        </template>
-                        <template #content>
-                            <p class="m-0">
-                                {{ slotProps.item.content }}
-                            </p>
-                        </template>
-                    </Card>
-                </template>
-            </Timeline> -->
-            <!-- <Timeline :value="events" align="alternate" class="customized-timeline">
-                <template #marker="slotProps">
-                    <span class="bullet" :style="{ backgroundColor: slotProps.item.color }">
-                        <i :class="slotProps.item.icon"></i>
-                    </span>
-                </template>
-                <template #content="slotProps">
-                    <Card class="mt-3">
-                        <template #title>
-                            {{ slotProps.item.status }}
-                        </template>
-                        <template #subtitle>
-                            {{ slotProps.item.date }}
-                        </template>
-                        <template #content>
-                            <Tag severity="info" :value="slotProps.item.tag"></Tag>
-                            <p class="m-0">
-                                {{ slotProps.item.content }}
-                            </p>
-                        </template>
-                    </Card>
-                </template>
-            </Timeline> -->
         </div>
         <div v-show="!showTimeline">
             <span>There are no event available for this passport</span>

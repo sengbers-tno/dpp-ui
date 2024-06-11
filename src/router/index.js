@@ -85,11 +85,6 @@ const router = createRouter({
                     component: () => import('@/views/pages/templates/TemplateList.vue')
                 },
                 {
-                    path: '/templates/create',
-                    name: 'Create DPP Template',
-                    component: () => import('@/views/pages/templates/TemplateCreate.vue')
-                },
-                {
                     path: '/templates/statistics',
                     name: 'DPP Template Statistics',
                     component: () => import('@/views/pages/templates/TemplateStatistics.vue')

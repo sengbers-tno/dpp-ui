@@ -57,7 +57,7 @@
         attachmentsList.value = [];
         var key = Object.keys(json)[0];
         const desiredJsonValue = json[key];
-        desiredJsonValue.attachments.forEach((element) => {
+        desiredJsonValue.forEach((element) => {
             // Slice the id only to display number.
             var sourceIdMatch = element.source_id.match(/[^:]+$/);
             var sourceIdValue = sourceIdMatch ? sourceIdMatch[0] : null;

@@ -1,7 +1,12 @@
 <template>
-    <div className="card">
-        <h5>Empty Page</h5>
-        <p>Use this page to start from scratch and place your custom content.</p>
-        <p>Passport control -> Aggregate statistics</p>
+    <div>
+        <Card>
+            <template #content>
+                <h3>List Digital Product Passports</h3>
+                <Message severity="warn" :closable="false">Work in progress! This page is not yet complete.</Message>
+                <!-- <p></p>
+        <p>Passport control -> Aggregate statistics</p> -->
+            </template>
+        </Card>
     </div>
 </template>

@@ -1,17 +1,19 @@
 <script setup>
     import Card from 'primevue/card';
     import Timeline from '@/components/dpps/Timeline.vue';
+    import TShirt from '@/components/dpps/attributeVisualizations/TShirt.vue';
+    import OscillatorModule from '@/components/dpps/attributeVisualizations/OscillatorModule.vue';
     // import LifecycleAssessment from '@/components/dpps/LifecycleAssessment.vue';
     // import MaterialComposition from '@/components/dpps/MaterialComposition.vue';
     import AttachmentsTable from '@/components/dpps/AttachmentsTable.vue';
-    // import General from '@/components/dpps/General.vue';
+    import General from '@/components/dpps/General.vue';
     import { useDppStore } from '@/store/dpp.js';
     // import dppData from '@/models/templates.json';
     import { useToast } from 'primevue/usetoast';
     const toast = useToast();
     import { ref, onMounted } from 'vue';
     import { useRoute, useRouter } from 'vue-router';
-    import CredentialsTable from '@/components/dpps/CredentialsTable.vue';
+    // import CredentialsTable from '@/components/dpps/CredentialsTable.vue';
 
     const uuidValue = ref(null);
     const store = useDppStore();
@@ -31,6 +33,7 @@
     const isHierarchyPanelVisible = ref(true);
     const isVisualizationPanelVisible = ref(true);
 
+    const selectedDppType = ref();
     const clickedTableItem = ref();
     const activeTabIndex = ref(0);
 
@@ -74,6 +77,7 @@
         console.log('Clicked random dpp');
         let id = await store.getRandomDpp();
         console.log('Received id -> ' + id);
+        clearUuid();
         uuidValue.value = id;
     };
 
@@ -81,6 +85,7 @@
         console.log('Clicked latest dpp');
         let id = await store.getLatestDpp();
         console.log('Received id -> ' + id);
+        clearUuid();
         uuidValue.value = id;
     };
     const searchUUID = async (event) => {
@@ -119,30 +124,9 @@
                 valueToCheck = valueToCheck.value;
             }
             loading.value = true;
-            // let localDppData = data;
-            // let localDppData = await store.getBasicDpp(uuidValue.value);
-
-            // var treeTableData = recursivelyCreateTreeTableData(uuidValue.value, '0');
-            // let localDppData = await store.getCompactDpp(uuidValue.value);
-            // var data = JSON.parse(JSON.stringify(localDppData));
-            // console.log('___ outer function');
-            // console.log(data);
-
-            // console.log('-----------');
             try {
                 var treeTableData = await recursivelyCreateTreeTableData(valueToCheck, '0');
 
-                // let localDppData = await store.getFullDpp(uuidValue.value);
-                // var treeTableData = await convertJsonToCustomFormat(localDppData);
-                // console.log(JSON.stringify(treeTableData, null, 2));
-
-                // Get data parsed just for kicks
-
-                // This should be filled in and available if the table is visible
-                // jsonDisplayData.value = data;
-                // Previous code
-                // var treeTableData = convertJsonToCustomFormat(data);
-                // console.log(treeTableData);
                 isHierarchyPanelVisible.value = true;
                 treeTableDataList.value = treeTableData;
             } catch {
@@ -153,9 +137,7 @@
     };
     const recursivelyCreateTreeTableData = async (dppUUID, prefix) => {
         let output = [];
-        // console.log('----====');
-        // console.log(dppUUID);
-        // console.log(prefix);
+
         // Fetch data using axios
         try {
             var test = await store.getCompactDpp(dppUUID);
@@ -165,10 +147,6 @@
             toast.add({ severity: 'error', summary: 'DPP with UUID not valid or not found at server', detail: 'Message Content', life: 3150 });
             throw error;
         }
-        // console.log('----');
-        // console.log(test);
-        // Parse the data
-        // var data = JSON.parse(JSON.stringify(localDppData));
         var key = Object.keys(test)[0];
         var node = test[key];
 
@@ -201,10 +179,16 @@
     };
 
     const fetchMetadata = async () => {
-        const metadata = await store.getMetadata();
-        passportTypes.value = Object.keys(metadata.passport.passports_by_type).map((type) => ({ label: type, value: type }));
-        tags.value = Object.keys(metadata.passport.passports_by_tag).map((tag) => ({ label: tag, value: tag }));
-        batches.value = Object.keys(metadata.passport.passports_by_batch).map((batch) => ({ label: batch, value: batch }));
+        let metadata;
+        try {
+            metadata = await store.getMetadata();
+        } catch {
+            toast.add({ severity: 'error', summary: 'Backend not available!', detail: 'Message Content', life: 3150 });
+            metadata = {};
+        }
+        passportTypes.value = Object.keys(metadata?.passport.passports_by_type).map((type) => ({ label: type, value: type }));
+        tags.value = Object.keys(metadata?.passport.passports_by_tag).map((tag) => ({ label: tag, value: tag }));
+        batches.value = Object.keys(metadata?.passport.passports_by_batch).map((batch) => ({ label: batch, value: batch }));
         // Populate country codes with standard values
         countryCodes.value = [
             { label: 'US', value: 'US' },
@@ -225,21 +209,21 @@
         isVisualizationPanelVisible.value = false;
     };
     const onClickId = async (item) => {
-        // if (isVisualizationPanelVisible.value == false) {
-        // isVisualizationPanelVisible.value = true;
         if (clickedTableItem.value == undefined) {
             console.log('Nothing was selected at this point, or previously');
             console.log(item);
             clickedTableItem.value = item;
             let data = await store.getFullDpp(item.data.ID);
+            selectedDppType.value = Object.keys(data)[0];
+            console.log(selectedDppType.value);
             let attributeData = await store.getDppAttributes(item.data.ID);
-            let generalData = await store.getDppGeneralData(item.data.ID);
-            let credentialData = await store.getDppCredentials(item.data.ID);
+            let genData = await store.getDppGeneralData(item.data.ID);
+            let credData = await store.getDppCredentials(item.data.ID);
 
             jsonDisplayData.value = data;
             attributeDisplayData.value = attributeData;
-            generalData.value = generalData;
-            credentialData.value = credentialData;
+            generalData.value = genData;
+            credentialData.value = credData;
             console.log(jsonDisplayData.value);
             console.log(attributeDisplayData.value);
             console.log(generalData.value);
@@ -288,15 +272,13 @@
 </script>
 
 <template>
-    <!-- <div class="card flex justify-content-center"> -->
     <Toast />
-    <!-- <Button label="Multiple" severity="warning" @click="showMultiple()" /> -->
-    <!-- </div> -->
     <Card>
         <template #content>
+            <h3>Visualize Digital Product Passports</h3>
+            <Message severity="warn" :closable="false">Work in progress! This page is not yet complete.</Message>
             <div id="id-panel" class="pb-3">
-                <Panel header="Retrieve Digital Product Passport" toggleable>
-                    <small id="productUuid-help"><p>Start typing to immediately get recommendations for DPP IDs known in the database. Use the filters to get filtered suggestions!</p></small>
+                <Panel>
                     <div class="p-fluid grid">
                         <div class="field col-12 md:col-9">
                             <label for="productUuid">Product UUID</label>
@@ -311,6 +293,7 @@
                             <Button title="Fetch last published" label="Last created" @click="latestDpp" />
                         </div>
                     </div>
+                    <small id="starting-text"><p>Start typing to immediately get recommendations for DPP IDs known in the database. Use the filters to get filtered suggestions!</p></small>
                     <Fieldset legend="Additional Filters" toggleable collapsed>
                         <div class="p-fluid grid">
                             <div class="field col-12 md:col-4">
@@ -382,17 +365,6 @@
                             </template>
                         </Column>
                     </TreeTable>
-
-                    <!-- <TreeTable :value="treeTableDataList" :paginator="true" :rows="10" :loading="loading" :resizableColumns="true" dataKey="id">
-                        <Column field="Type" header="Type" :expander="true">
-                            <template #body="slotProps">
-                                <span class="pointer" @click="onClickId(slotProps.node)"> {{ slotProps.node?.data?.Type || '<i>unknown</i>' }} </span>
-                            </template>
-                        </Column>
-                        <Column field="Manufacturer" header="Manufacturer"></Column>
-                        <Column field="ID" header="ID"></Column>
-                        <Column field="Owner" header="Owner"></Column>
-                    </TreeTable> -->
                 </Panel>
             </div>
             <div class="pb-3" v-if="clickedTableItem">
@@ -402,8 +374,8 @@
                         <!-- <TabView> -->
                         <TabPanel header="General">
                             <div>
-                                <!-- <General :generalData="generalData"></General> -->
-                                <pre>{{ generalData }}</pre>
+                                <!-- <pre>{{ generalData }}</pre> -->
+                                <General :generalData="generalData"></General>
                                 <!-- <LifecycleAssessment></LifecycleAssessment> -->
                             </div>
                         </TabPanel>
@@ -414,26 +386,26 @@
                         </TabPanel>
                         <TabPanel header="Attributes">
                             <div>
-                                <pre>{{ attributeDisplayData }}</pre>
-                                <!-- <LifecycleAssessment></LifecycleAssessment> -->
+                                <template v-if="selectedDppType === 'TShirtProductPassport'">
+                                    <TShirt :attributeData="attributeDisplayData"></TShirt>
+                                </template>
+                                <template v-else-if="selectedDppType === 'OscillatorModulePassport'">
+                                    <OscillatorModule :attributeData="attributeDisplayData"></OscillatorModule>
+                                </template>
+                                <template v-else>
+                                    <pre>{{ attributeDisplayData }}</pre>
+                                </template>
                             </div>
                         </TabPanel>
-                        <TabPanel header="Credentials">
+                        <!-- <TabPanel header="Credentials">
                             <CredentialsTable :attachmentEvents="credentialData"></CredentialsTable>
-                        </TabPanel>
+                        </TabPanel> -->
                         <TabPanel header="Attachments">
                             <AttachmentsTable :attachmentEvents="attachmentData"></AttachmentsTable>
                         </TabPanel>
                         <TabPanel header="Raw JSON">
                             <div>
                                 <pre>{{ jsonDisplayData }}</pre>
-                            </div>
-                        </TabPanel>
-                        <TabPanel header="General">
-                            <div>
-                                <!-- <General :generalData="generalData"></General> -->
-                                <pre>{{ generalData }}</pre>
-                                <!-- <LifecycleAssessment></LifecycleAssessment> -->
                             </div>
                         </TabPanel>
                         <!-- <TabPanel header="Material Composition">

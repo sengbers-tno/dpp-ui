@@ -1,5 +1,6 @@
 <script setup>
-    import { ref, toRefs, watch, computed } from 'vue';
+    import Card from 'primevue/card';
+    import { ref, toRefs, watch } from 'vue';
     import { onMounted } from 'vue';
     // import { Panel } from 'primevue/panel';
 
@@ -8,19 +9,32 @@
     });
 
     const localGeneralData = ref();
+    const instantiatedFrom = ref(null);
+    const currentOwner = ref(null);
+    const manufacturer = ref(null);
+    const knownPastOwners = ref(null);
+    const economicOperator = ref(null);
+    const tags = ref([]);
 
     const generalData = toRefs(props);
     watch(generalData.generalData, (newVal) => {
         console.log('General Data Loaded:', newVal);
-        localGeneralData.value = newVal.value;
+        localGeneralData.value = newVal;
+        manufacturer.value = localGeneralData.value?.manufacturer;
+        instantiatedFrom.value = localGeneralData.value?.instantiated_from;
+        currentOwner.value = localGeneralData.value?.current_owner;
+        knownPastOwners.value = localGeneralData.value?.known_past_owners;
+        economicOperator.value = localGeneralData.value?.economic_operator;
+        tags.value = localGeneralData.value?.tags;
     });
 
-    const manufacturer = computed(() => localGeneralData.value?.manufacturer || {});
-    const instantiatedFrom = computed(() => localGeneralData.value?.instantiated_from || {});
-    const currentOwner = computed(() => localGeneralData.value?.current_owner || {});
-    const knownPastOwners = computed(() => localGeneralData.value?.known_past_owners || []);
-    const economicOperator = computed(() => localGeneralData.value?.economic_operator || []);
-    const tags = computed(() => localGeneralData.value?.tags || []);
+    // const manufacturer = computed(() => localGeneralData.value?.manufacturer || {});
+    // // const instantiatedFrom = computed(() => localGeneralData.value?.instantiated_from || {});
+
+    // const currentOwner = computed(() => localGeneralData.value?.current_owner || {});
+    // const knownPastOwners = computed(() => localGeneralData.value?.known_past_owners || []);
+    // const economicOperator = computed(() => localGeneralData.value?.economic_operator || []);
+    // const tags = computed(() => localGeneralData.value?.tags || []);
 
     onMounted(() => {
         console.log('General Data in Component (mounted):', props.generalData);
@@ -29,68 +43,98 @@
 
 <template>
     <div v-if="localGeneralData">
-        <Panel header="Product Information">
-            <div>
+        <Card>
+            <template #content>
+                <!-- <div class="col-12 md:col-12"> -->
                 <h4>{{ localGeneralData.title }}</h4>
-                <p><strong>ID:</strong> {{ localGeneralData.id }}</p>
-                <p><strong>Registration ID:</strong> {{ localGeneralData.registration_id }}</p>
-                <p><strong>Creation Timestamp:</strong> {{ new Date(localGeneralData.creation_timestamp).toLocaleString() }}</p>
-            </div>
-        </Panel>
 
-        <Panel header="Template Information">
-            <div>
-                <p><strong>Template ID:</strong> {{ instantiatedFrom.template_id }}</p>
-                <p><strong>Version:</strong> {{ instantiatedFrom.version }}</p>
-            </div>
-        </Panel>
-
-        <Panel header="Manufacturer Information">
-            <div>
-                <p><strong>Name:</strong> {{ manufacturer.name }}</p>
-                <p><strong>Full Name:</strong> {{ manufacturer.full_name }}</p>
-                <p><strong>Facility:</strong> {{ manufacturer.facility.map((f) => f.name).join(', ') }}</p>
-                <p><strong>Batch ID:</strong> {{ manufacturer.batch_id }}</p>
-            </div>
-        </Panel>
-
-        <Panel header="Economic Operator">
-            <div>
-                <p v-for="operator in economicOperator" :key="operator.id">
-                    <strong>{{ operator.name }}:</strong><br />
-                    <span>{{ operator.full_name }}</span
-                    ><br />
-                    <span>Repository Address: {{ operator.repository_address.map((ra) => ra.hostname).join(', ') }}</span>
-                    <br /><br />
-                </p>
-            </div>
-        </Panel>
-
-        <Panel header="Current Owner">
-            <div>
-                <p><strong>Name:</strong> {{ currentOwner.name }}</p>
-                <p><strong>Full Name:</strong> {{ currentOwner.full_name }}</p>
-                <p><strong>Facility:</strong> {{ currentOwner.facility.map((f) => f.name).join(', ') }}</p>
-            </div>
-        </Panel>
-
-        <Panel header="Known Past Owners">
-            <div>
-                <div v-for="owner in knownPastOwners" :key="owner.id">
-                    <p>
-                        <strong>{{ owner.name }}:</strong> {{ owner.full_name }}
-                    </p>
-                    <p><strong>Facility:</strong> {{ owner.facility.map((f) => f.name).join(', ') }}</p>
-                    <br />
+                <h5>Product Information</h5>
+                <p><strong>ID: </strong> {{ localGeneralData.id }}</p>
+                <p><strong>Registration ID: </strong> {{ localGeneralData.registration_id }}</p>
+                <p><strong>Creation Timestamp: </strong> {{ new Date(localGeneralData.creation_timestamp).toLocaleString() }}</p>
+                <div>
+                    <span v-for="tag in tags" :key="tag" class="tag">{{ tag }}</span>
                 </div>
-            </div>
-        </Panel>
+            </template>
 
-        <Panel header="Tags">
-            <div>
-                <span v-for="tag in tags" :key="tag" class="tag">{{ tag }}</span>
-            </div>
-        </Panel>
+            <Fieldset v-if="instantiatedFrom" legend="Template Information" toggleable collapsed>
+                <Card>
+                    <template #content>
+                        <h5>Template Information</h5>
+                        <p><strong>Template ID:</strong> {{ instantiatedFrom.template_id }}</p>
+                        <p><strong>Version:</strong> {{ instantiatedFrom.version }}</p>
+                    </template>
+                </Card>
+            </Fieldset>
+        </Card>
+    </div>
+    <div v-if="currentOwner">
+        <Card>
+            <template #content>
+                <h5>Current Owner</h5>
+                <div>
+                    <p><strong>Name:</strong> {{ currentOwner.name }}</p>
+                    <p><strong>Full Name:</strong> {{ currentOwner.full_name }}</p>
+                    <p><strong>Facility:</strong> {{ currentOwner.facility.map((f) => f.name).join(', ') }}</p>
+                    <p><strong>Batch ID:</strong> {{ currentOwner.batch_id || 'unknown' }}</p>
+                </div>
+            </template>
+        </Card>
+    </div>
+    <div v-if="manufacturer">
+        <Card>
+            <template #content>
+                <h5>Manufacturer Information</h5>
+                <div>
+                    <p><strong>Name:</strong> {{ manufacturer.name }}</p>
+                    <p><strong>Full Name:</strong> {{ manufacturer.full_name }}</p>
+                    <p><strong>Facility:</strong> {{ manufacturer.facility.map((f) => f.name).join(', ') }}</p>
+                    <p><strong>Batch ID:</strong> {{ manufacturer.batch_id }}</p>
+                </div>
+            </template>
+        </Card>
+    </div>
+    <div v-if="economicOperator">
+        <Card>
+            <template #content>
+                <h5>Known economic operators</h5>
+                <div class="p-grid">
+                    <div class="p-col-12 lg:p-col-6" v-for="operator in economicOperator" :key="operator.id">
+                        <Card>
+                            <template #content>
+                                <div>
+                                    <p><strong>ID: </strong> {{ operator.id }}</p>
+                                    <p><strong>Name: </strong> {{ operator.name }}</p>
+                                    <p><strong>Full Name: </strong> {{ operator.full_name }}</p>
+                                    <p><strong>Repository Address:</strong> {{ operator.repository_address.map((ra) => ra.hostname).join(', ') }}</p>
+                                </div>
+                            </template>
+                        </Card>
+                    </div>
+                </div>
+            </template>
+        </Card>
+    </div>
+    <div v-if="knownPastOwners">
+        <Card>
+            <template #content>
+                <h5>Known past owners</h5>
+                <div class="p-grid">
+                    <div class="p-col-12 lg:p-col-6" v-for="owner in knownPastOwners" :key="owner.id">
+                        <Card>
+                            <template #content>
+                                <div>
+                                    <p><strong>ID: </strong> {{ owner.id }}</p>
+                                    <p><strong>Name: </strong> {{ owner.name }}</p>
+                                    <p><strong>Full Name: </strong> {{ owner.full_name }}</p>
+                                    <p><strong>Facility:</strong> {{ owner.facility.map((f) => f.name).join(', ') }}</p>
+                                </div>
+                            </template>
+                        </Card>
+                    </div>
+                </div>
+            </template>
+        </Card>
     </div>
 </template>
 
@@ -102,6 +146,12 @@
         padding: 0.25em 0.5em;
         margin: 0.25em;
         border-radius: 4px;
+    }
+    .p-grid {
+        margin-bottom: 1em;
+    }
+    .p-card {
+        margin-bottom: 1em;
     }
 </style>
 <!-- <ScrollPanel style="height: 200px">

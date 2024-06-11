@@ -17,7 +17,7 @@
             items: [
                 { label: 'List Passports', icon: 'pi pi-fw pi-id-card', to: '/dpps/list' }, // ID card for representing a "passport".
                 { label: 'Visualize', icon: 'pi pi-fw pi-eye', to: '/dpps/visualize' }, // Eye for visualizing.
-                { label: 'Update', icon: 'pi pi-fw pi-refresh', to: '/dpps/update' }, // Refresh for updating.
+                { label: 'Update', icon: 'pi pi-fw pi-file-edit', to: '/dpps/update' }, // Refresh for updating.
                 { label: 'Create', icon: 'pi pi-fw pi-pencil', to: '/dpps/create' }, // Pencil for creating.
                 { label: 'Repository Statistics', icon: 'pi pi-fw pi-chart-bar', to: '/dpps/statistics' } // Chart bar for statistics.
             ]
@@ -26,7 +26,6 @@
             label: 'Passport Templates',
             items: [
                 { label: 'List Templates', icon: 'pi pi-fw pi-th-large', to: '/templates/list' },
-                { label: 'Create Template', icon: 'pi pi-fw pi-file-edit', to: '/templates/create' },
                 { label: 'Template Statistics', icon: 'pi pi-fw pi-chart-bar', to: '/templates/statistics' }
             ]
         },

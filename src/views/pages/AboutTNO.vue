@@ -1,9 +1,13 @@
 <script></script>
 
 <template>
-    <div class="main-div">
-        <h1>About TNO</h1>
-    </div>
+    <Card>
+        <template #content>
+            <div class="main-div">
+                <h1>About TNO</h1>
+            </div>
+        </template>
+    </Card>
 </template>
 
 <style lang="scss" scoped>
