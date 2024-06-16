@@ -1,6 +1,8 @@
 <script setup>
     import { ref, watch, toRefs } from 'vue';
     import PDFViewer from './PDFViewer.vue';
+    import pdfIcon from '/src/assets/images/PDF_file_icon.svg';
+    const apiEndpoint = import.meta.env.VITE_API_ENDPOINT;
 
     const props = defineProps({
         attachmentEvents: Object
@@ -38,14 +40,14 @@
             //     sourceIdValue = element.template_id ? null : sourceIdValue;
             // }
             // TODO: Fix base URL to not only resolve local metadata, but also to gather information from other sources.
-            let image_url = 'http://localhost:8001/dpps/' + element.source_id + '/attachments/' + element.attachment_id;
+            let image_url = `${apiEndpoint}dpps/${element.source_id}/attachments/${element.attachment_id}`;
             // let image_path_thumbnail = 'http://localhost:8001/dpps/' + element.source_id + '/attachments/' + element.attachment_id;
             let image_thumbnail_url = '';
             if (element.type == 'document') {
                 // image_thumbnail_url = new URL(`../assets/images/PDF_file_icon.svg`, import.meta.url).href;
-                image_thumbnail_url = '/src/assets/images/PDF_file_icon.svg';
+                image_thumbnail_url = pdfIcon;
             } else {
-                image_thumbnail_url = 'http://localhost:8001/dpps/' + element.source_id + '/attachments/' + element.attachment_id + '/thumbnail';
+                image_thumbnail_url = `${apiEndpoint}dpps/${element.source_id}/attachments/${element.attachment_id}/thumbnail`;
             }
             var row = {
                 id: element.attachment_id,
