@@ -1,8 +1,9 @@
 <script setup>
-    import Card from 'primevue/card';
+    // import Card from 'primevue/card';
     import Timeline from '@/components/dpps/Timeline.vue';
     import TShirt from '@/components/dpps/attributeVisualizations/TShirt.vue';
     import OscillatorModule from '@/components/dpps/attributeVisualizations/OscillatorModule.vue';
+    import Battery from '@/components/dpps/attributeVisualizations/Battery.vue';
     // import LifecycleAssessment from '@/components/dpps/LifecycleAssessment.vue';
     // import MaterialComposition from '@/components/dpps/MaterialComposition.vue';
     import AttachmentsTable from '@/components/dpps/AttachmentsTable.vue';
@@ -147,8 +148,9 @@
             toast.add({ severity: 'error', summary: 'DPP with UUID not valid or not found at server', detail: 'Message Content', life: 3150 });
             throw error;
         }
-        var key = Object.keys(test)[0];
-        var node = test[key];
+        // var key = Object.keys(test)[0];
+        // var node = test[key];
+        var node = test;
 
         // Define the current node with the required columns
         let customNode = {
@@ -156,7 +158,7 @@
             data: {
                 Type: node.title || null,
                 Manufacturer: node.manufacturer?.name || null,
-                ID: node.id,
+                ID: node.id || node['@id'],
                 Owner: node.current_owner?.name || null
             },
             children: []
@@ -209,12 +211,21 @@
         isVisualizationPanelVisible.value = false;
     };
     const onClickId = async (item) => {
-        if (clickedTableItem.value == undefined) {
-            console.log('Nothing was selected at this point, or previously');
-            console.log(item);
+        if (clickedTableItem.value != undefined && clickedTableItem.value == item) {
+            console.log('Same item was clicked on as before.');
+            clickedTableItem.value = undefined;
+        } else {
+            console.log('Either nothing was selected at this point, or previously');
+            console.log('or a different item was clicked on this time.');
+            console.log('Clearing values to prevent Attributes section from loading too quickly');
+            jsonDisplayData.value = undefined;
+            attributeDisplayData.value = undefined;
+            generalData.value = undefined;
+            credentialData.value = undefined;
+
             clickedTableItem.value = item;
             let data = await store.getFullDpp(item.data.ID);
-            selectedDppType.value = Object.keys(data)[0];
+            selectedDppType.value = data.type || data['@type'];
             console.log(selectedDppType.value);
             let attributeData = await store.getDppAttributes(item.data.ID);
             let genData = await store.getDppGeneralData(item.data.ID);
@@ -230,36 +241,11 @@
             console.log(credentialData.value);
 
             // Pass through the json data to the timeline component
+            // itemIDforTimeline.value = item.data.ID;
             timelineData.value = data;
 
             // fill attachmentData reference
-            attachmentData.value = data;
-        } else if (clickedTableItem.value != undefined && clickedTableItem.value == item) {
-            console.log('Same item was clicked on as before.');
-            clickedTableItem.value = undefined;
-        } else {
-            console.log('Different item was clicked on this time.');
-
-            clickedTableItem.value = item;
-            let data = await store.getFullDpp(item.data.ID);
-            let attributeData = await store.getDppAttributes(item.data.ID);
-            let generalData = await store.getDppGeneralData(item.data.ID);
-            let credentialData = await store.getDppCredentials(item.data.ID);
-
-            jsonDisplayData.value = data;
-            attributeDisplayData.value = attributeData;
-            generalData.value = generalData;
-            credentialData.value = credentialData;
-            console.log(jsonDisplayData.value);
-            console.log(attributeDisplayData.value);
-            console.log(generalData.value);
-            console.log(credentialData.value);
-
-            // Pass through the json data to the timeline component
-            timelineData.value = data;
-
-            // fill attachmentData reference
-            attachmentData.value = data;
+            attachmentData.value = data.attachments;
         }
         // } else {
         //     isVisualizationPanelVisible.value = false;
@@ -392,6 +378,9 @@
                                 <template v-else-if="selectedDppType === 'OscillatorModulePassport'">
                                     <OscillatorModule :attributeData="attributeDisplayData"></OscillatorModule>
                                 </template>
+                                <template v-else-if="selectedDppType === 'BatteryProductPassport'">
+                                    <Battery :attributeData="attributeDisplayData"></Battery>
+                                </template>
                                 <template v-else>
                                     <pre>{{ attributeDisplayData }}</pre>
                                 </template>
@@ -465,41 +454,3 @@
         }
     }
 </style>
-<!-- <style lang="scss" scoped>
-    .tab-panel {
-        padding-left: 15px;
-    }
-
-    .button-style {
-        padding-top: 1.7rem;
-        padding-right: 1.3rem;
-    }
-
-    .container {
-        flex-wrap: wrap;
-    }
-
-    pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        text-align: justify;
-    }
-    .pointer {
-        cursor: pointer;
-    }
-    // :deep(.button) {
-    //     background-color: #18181b;
-    //     border-width: 0;
-    //     cursor: pointer;
-    //     font-family: 'Inter var', sans-serif;
-    //     font-size: 1rem;
-    // }
-
-    // :deep(.p-treetable .p-treetable-tbody) {
-    //     .column {
-    //         display: flex;
-    //         text-align: left;
-    //         padding: 1rem;
-    //     }
-    // }
-</style> -->

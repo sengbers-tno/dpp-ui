@@ -30,9 +30,10 @@
 
     watch(attachmentEvents.attachmentEvents, (json) => {
         attachmentsList.value = [];
-        var key = Object.keys(json)[0];
-        const desiredJsonValue = json[key];
-        desiredJsonValue.attachments.forEach((element) => {
+        // var key = Object.keys(json)[0];
+        // const desiredJsonValue = json[key];
+        const desiredJsonValue = json;
+        desiredJsonValue.forEach((element) => {
             // Slice the id only to display number.
             // var sourceIdMatch = element.source_id.match(/[^:]+$/);
             // var sourceIdValue = sourceIdMatch ? sourceIdMatch[0] : null;
@@ -41,7 +42,6 @@
             // }
             // TODO: Fix base URL to not only resolve local metadata, but also to gather information from other sources.
             let image_url = `${apiEndpoint}dpps/${element.source_id}/attachments/${element.attachment_id}`;
-            // let image_path_thumbnail = 'http://localhost:8001/dpps/' + element.source_id + '/attachments/' + element.attachment_id;
             let image_thumbnail_url = '';
             if (element.type == 'document') {
                 // image_thumbnail_url = new URL(`../assets/images/PDF_file_icon.svg`, import.meta.url).href;
