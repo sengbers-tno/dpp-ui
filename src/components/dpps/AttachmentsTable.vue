@@ -2,7 +2,7 @@
     import { ref, watch, toRefs } from 'vue';
     import PDFViewer from './PDFViewer.vue';
     import pdfIcon from '/src/assets/images/PDF_file_icon.svg';
-    const apiEndpoint = import.meta.env.VITE_API_ENDPOINT;
+    const apiEndpoint = import.meta.env.VITE_API_ENDPOINT || '/api/';
 
     const props = defineProps({
         attachmentEvents: Object

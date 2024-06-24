@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      - API_ENDPOINT=http://backend:8001
+
+  backend:
+    image: ghcr.io/tno-dpp/dpp-data-repository:main
+    # ports:
+    #   - "8003:8001"

@@ -1,3 +1,4 @@
+# Build stage
 FROM node:latest as build-stage
 WORKDIR /app
 COPY package*.json ./
@@ -8,7 +9,13 @@ RUN pnpm install
 COPY ./ .
 RUN pnpm build
 
-FROM nginx as production-stage
+# Production stage
+FROM nginx:latest
 RUN mkdir /app
 COPY --from=build-stage /app/dist /app
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+COPY docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+EXPOSE 80
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]
