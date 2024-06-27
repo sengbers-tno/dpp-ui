@@ -3,7 +3,7 @@
     import Timeline from '@/components/dpps/Timeline.vue';
     import TShirt from '@/components/dpps/attributeVisualizations/TShirt.vue';
     import OscillatorModule from '@/components/dpps/attributeVisualizations/OscillatorModule.vue';
-    import Battery from '@/components/dpps/attributeVisualizations/Battery.vue';
+    // import Battery from '@/components/dpps/attributeVisualizations/Battery.vue';
     // import LifecycleAssessment from '@/components/dpps/LifecycleAssessment.vue';
     // import MaterialComposition from '@/components/dpps/MaterialComposition.vue';
     import AttachmentsTable from '@/components/dpps/AttachmentsTable.vue';
@@ -378,9 +378,9 @@
                                 <template v-else-if="selectedDppType === 'OscillatorModulePassport'">
                                     <OscillatorModule :attributeData="attributeDisplayData"></OscillatorModule>
                                 </template>
-                                <template v-else-if="selectedDppType === 'BatteryProductPassport'">
+                                <!-- <template v-else-if="selectedDppType === 'BatteryProductPassport'">
                                     <Battery :attributeData="attributeDisplayData"></Battery>
-                                </template>
+                                </template> -->
                                 <template v-else>
                                     <pre>{{ attributeDisplayData }}</pre>
                                 </template>
