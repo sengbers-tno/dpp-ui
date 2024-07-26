@@ -2,7 +2,7 @@
     "name": "sakai-vue",
     "version": "3.10.0",
     "scripts": {
-        "dev": "vite",
+        "dev": "vite --host 0.0.0.0",
         "build": "vite build",
         "preview": "vite preview",
         "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
