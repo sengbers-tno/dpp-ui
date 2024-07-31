@@ -81,6 +81,28 @@ export const useDppStore = defineStore('user', {
                 console.log(error);
             }
         },
+
+        async getDppQRCode(uuid) {
+            console.log(uuid)
+            try {
+                const response = await this.axios.get(`dpps/${uuid}/qrcode`);
+                console.log(response.data);
+                return response.data; // Ensure the data is returned here
+            } catch (error) {
+                if (error.response) {
+                    // Server responded with a status other than 2xx
+                    console.error('Response error:', error.response.data);
+                } else if (error.request) {
+                    // No response received
+                    console.error('Request error:', error.request);
+                } else {
+                    // Other errors
+                    console.error('Error:', error.message);
+                }
+                throw error; // Rethrow the error to handle it in the calling function
+            }
+        },
+
         // Pull dpp with all attachment links and images attached.
         async getFullDpp(uuid) {
             try {

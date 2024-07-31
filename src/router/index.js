@@ -103,7 +103,12 @@ const router = createRouter({
                     path: '/credentials/list',
                     name: 'List available credentials from known wallets',
                     component: () => import('@/views/pages/credentials/CredentialList.vue')
-                }
+                },
+                {
+                    path: '/dpps/qrcode',
+                    name: 'Create a DPP QR Code',
+                    component: () => import('@/views/pages/passports/QrCode.vue')
+                },
             ]
         },
         {

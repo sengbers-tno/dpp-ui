@@ -36,6 +36,10 @@
         {
             label: 'Configuration',
             items: [{ label: 'Edit', icon: 'pi pi-fw pi-cog', to: '/config' }]
+        },
+        {
+            label: 'QR Code',
+            items: [{label: 'Generate QR Code', icon: 'pi pi-fw pi-qrcode', to: '/dpps/qrcode'}]
         }
     ]);
     // const model = ref([
